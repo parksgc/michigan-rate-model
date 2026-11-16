@@ -56,6 +56,12 @@ legend, .lab{font-size:13px;font-weight:600;color:var(--ink);padding:0;margin:0 
 .worlds label:has(input:checked){border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
 .worlds label:has(input:focus-visible){outline:2px solid var(--contrib);outline-offset:2px}
 .dials{display:grid;gap:16px 24px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));margin-top:18px}
+.dial.wide{grid-column:1/-1}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 2px}
+.chips button{font:inherit;font-size:12px;color:var(--ink2);background:var(--surface);border:1px solid var(--axis);border-radius:999px;padding:3px 10px;cursor:pointer;font-variant-numeric:tabular-nums}
+.chips button:hover{border-color:var(--ink2)}
+.chips button[aria-pressed="true"]{color:var(--ink);border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.chips button:focus-visible{outline:2px solid var(--contrib);outline-offset:2px}
 .dial output{float:right;font-size:13px;font-weight:600;font-variant-numeric:tabular-nums}
 .dial small{display:block;font-size:12px;color:var(--muted);margin-top:4px;line-height:1.4}
 input[type=range]{width:100%;accent-color:var(--contrib);margin:2px 0 0;height:24px}
@@ -118,7 +124,7 @@ th{color:var(--ink2);font-weight:600}
   <fieldset>
     <legend>Which world</legend>
     <div class="worlds">
-      <label><input type="radio" name="w" value="A"><b>A. No federal bill</b>Today's law. Data centers pay DTE's standard rate, and other customers carry any shortfall.</label>
+      <label><input type="radio" name="w" value="A"><b>A. No federal bill</b>Today's law. Data centers pay DTE's standard rate, and other customers get whatever it leaves above cost.</label>
       <label><input type="radio" name="w" value="B"><b>B. The bill, no state action</b>A floor at the cost of service, and a federal transmission charge credited to other customers.</label>
       <label><input type="radio" name="w" value="C" checked><b>C. The bill plus our model state legislation</b>The State adds a charge above the standard rate and credits it to other customers.</label>
     </div>
@@ -130,9 +136,10 @@ th{color:var(--ink2);font-weight:600}
     <div class="dial"><label class="lab" for="ad">The statute's adder <output id="ado" for="ad"></output></label>
       <input type="range" id="ad" min="0" max="70" step="1" value="10">
       <small id="adh"></small></div>
-    <div class="dial"><label class="lab" for="con">What standard rates already contribute</label>
-      <select id="con"></select>
-      <small>Dollars per MWh that reach other customers before any adder. The record does not agree on it.</small></div>
+    <div class="dial wide"><label class="lab" for="con">What data centers already pay above their cost <output id="cono" for="con"></output></label>
+      <input type="range" id="con" min="0" max="30" step="any" aria-describedby="conh">
+      <div class="chips" role="group" aria-label="Figures in the record"></div>
+      <small id="conh">This happens under Michigan's rules today, with no new law. A data center on DTE's standard rate pays more than the extra cost of serving it. The Commission sets DTE's rates to cover its total costs, so at the next rate case that difference lowers everyone else's rates. How big it is is disputed: the record runs from $5.46 (MPSC Staff) to $27.51 (DTE's claim for Saline), and the buttons set those figures. It cannot go much past $27, because a data center pays about $61 per MWh and fuel alone costs DTE about $34.</small></div>
     <div class="dial"><label class="lab" for="rule">Who gets the adder</label>
       <select id="rule"><option value="all">Every other customer, per kWh</option><option value="hh">Households only</option></select>
       <small>A choice the statute makes.</small></div>
@@ -168,7 +175,6 @@ th{color:var(--ink2);font-weight:600}
     <li><span class="sw" style="background:var(--contrib)"></span>Contribution at standard rates</li>
     <li><span class="sw" style="background:var(--tcredit)"></span>Federal transmission charge</li>
     <li><span class="sw" style="background:var(--adder)"></span>Adder under the statute</li>
-    <li><span class="sw" style="background:var(--neg)"></span>Shortfall carried by households</li>
   </ul>
 </figure>
 </section>
@@ -181,7 +187,6 @@ th{color:var(--ink2);font-weight:600}
     <li><span class="sw" style="background:var(--contrib)"></span>Contribution at standard rates</li>
     <li><span class="sw" style="background:var(--tcredit)"></span>Federal transmission charge</li>
     <li><span class="sw" style="background:var(--adder)"></span>Adder under the statute</li>
-    <li><span class="sw" style="background:var(--neg)"></span>Shortfall carried by other customers</li>
     <li><span class="sw" style="background:var(--neutral)"></span>Left for other customers</li>
   </ul>
   <details><summary>Show the numbers as a table</summary><div class="tw" id="tab"></div></details>
@@ -196,7 +201,7 @@ th{color:var(--ink2);font-weight:600}
 </main>
 <div id="tip" aria-hidden="true"></div>
 <script>
-const P = {"lf": 0.9, "sh_kwh": 0.412248463982674, "sh_cos": 0.471106485101261, "c_os": 107, "pg_a": 60.5806859981694, "tcr": 6.30398259796997, "dc": 31.6670440905, "K": 0.0137522711511342, "cert_y": 1, "mu2": -0.83461744633639, "ex_s2": 1, "nonll": 40795340.6, "ll_bill": 18787572, "res_cust": 2078315, "hh_bill": 1571.8608584358, "lb_mid": 305.396565529325, "g1_tot": -25.4653698994142, "g2_tot": 7.36751523665243, "g3_tot": 20.189246749007, "g4_tot": 57.3665332824985, "g5_tot": 126.169332683461, "g1_dp": -0.22, "g2_dp": 0.0636493150684932, "g3_dp": 0.174418604651163, "g4_dp": 0.4956, "g5_dp": 1.09, "case2": 21.5800636718784, "case7": 5.45598680872654, "case10": -7.75815731733589, "ln_mid": 7.48606485539001, "lh_mid": 60.577566463721, "g_mmbtu": 97.1170434003871, "hh_kwh": 8092.04403567313, "ceil_o": 40.1153314038606, "ceil_r": 71.7823754943606};
+const P = {"lf": 0.9, "sh_kwh": 0.412248463982674, "sh_cos": 0.471106485101261, "c_os": 107, "pg_a": 60.5806859981694, "tcr": 6.30398259796997, "dc": 31.6670440905, "K": 0.0137522711511342, "cert_y": 1, "mu2": -0.83461744633639, "ex_s2": 1, "nonll": 40795340.6, "ll_bill": 18787572, "res_cust": 2078315, "hh_bill": 1571.8608584358, "lb_mid": 305.396565529325, "g1_tot": -25.4653698994142, "g2_tot": 7.36751523665243, "g3_tot": 20.189246749007, "g4_tot": 57.3665332824985, "g5_tot": 126.169332683461, "g1_dp": -0.22, "g2_dp": 0.0636493150684932, "g3_dp": 0.174418604651163, "g4_dp": 0.4956, "g5_dp": 1.09, "case1": 27.5139192917697, "case2": 21.5800636718784, "case3": 12.0192873905178, "case4": 11.8269787922695, "case5": 10.78132927448, "case7": 5.45598680872654, "ln_mid": 7.48606485539001, "lh_mid": 60.577566463721, "g_mmbtu": 97.1170434003871, "hh_kwh": 8092.04403567313, "ceil_o": 40.1153314038606, "ceil_r": 71.7823754943606};
 /* The explorer's arithmetic. Same formulas as the workbook's M1 Surplus, M2 Lines and M3 Exit tabs.
    P: parameters read from the recalculated workbook. d: the reader's choices.
    d = {gw, adder, c, hhOnly, gas, restrict, count, reloc}
@@ -270,13 +275,17 @@ function focusRow(svg, x, y, w, hgt, label, title, rows){
 }
 
 /* ---------- the choices ---------- */
-const CON = [["Staff's Van Buren figure", P.case7], ["DTE's own cost studies", P.case2], ["Nothing above cost", 0], ["A shortfall: new gas plants must be built", P.case10]];
+// figures in the record, $ per MWh of new load (workbook M1 Surplus, contribution cases). The slider covers $0 to $30.
+const CON = [["MPSC Staff, Van Buren", P.case7], ["DTE, Van Buren", P.case5], ["MEICEO, Van Buren", P.case4], ["ABATE, Van Buren", P.case3], ["DTE's cost studies", P.case2], ["DTE, Saline", P.case1]];
 const GAS = [["No effect counted", 0], ["Pipelines built faster (ICF)", P.g1_dp], ["More LNG exports, low", P.g2_dp], ["More LNG exports, high", P.g3_dp], ["Every pending LNG project built", P.g4_dp], ["Unconstrained exports by 2050 (DOE)", P.g5_dp]];
-CON.forEach(([n, v], i) => { const o = h("option", $("con"), `${n}: ${m2(v)} per MWh`); o.value = i; });
+$("con").value = P.case7;   // default: Staff's Van Buren figure, exactly as in the workbook
+const chips = document.querySelector(".chips");
+CON.forEach(([n, v]) => { const b = h("button", chips, `${n} ${m2(v)}`); b.type = "button"; b.dataset.v = v;
+  b.addEventListener("click", () => { $("con").value = v; draw(); }); });
 GAS.forEach(([n, v], i) => { const o = h("option", $("gas"), i ? `${n}: gas ${v < 0 ? "down" : "up"} $${Math.abs(v).toFixed(2)}` : n); o.value = i; });
 const WN = {A:"A. No federal bill", B:"B. The bill, no state action", C:"C. The bill plus our model state legislation"};
 const SEG = [["con", "Contribution at standard rates", "contrib"], ["tc", "Federal transmission charge", "tcredit"], ["ad", "Adder under the statute", "adder"]];
-function choices(){ return {w: document.querySelector('input[name="w"]:checked').value, gw: +$("gw").value, adder: +$("ad").value, c: CON[+$("con").value][1], hhOnly: $("rule").value === "hh", gas: +$("gas").value, restrict: $("restrict").value === "yes", count: $("count").value === "yes", reloc: +$("reloc").value}; }
+function choices(){ return {w: document.querySelector('input[name="w"]:checked').value, gw: +$("gw").value, adder: +$("ad").value, c: +$("con").value, hhOnly: $("rule").value === "hh", gas: +$("gas").value, restrict: $("restrict").value === "yes", count: $("count").value === "yes", reloc: +$("reloc").value}; }
 
 /* ---------- one stacked row chart, used twice ---------- */
 function nice(v){ const p = Math.pow(10, Math.floor(Math.log10(v))), f = v / p; return (f <= 1 ? 1 : f <= 2 ? 2 : f <= 2.5 ? 2.5 : f <= 5 ? 5 : 10) * p; }
@@ -319,6 +328,8 @@ function draw(){
   const capR = Math.min(70, Math.floor(P.ceil_r)), capO = Math.min(40, Math.floor(P.ceil_o)), cap = $("restrict").value === "yes" ? capR : capO;
   $("ad").max = cap; if (+$("ad").value > cap) $("ad").value = cap;
   const d = choices(), R = model(P, d), r = R[d.w];
+  $("cono").textContent = m2(d.c) + " per MWh";
+  chips.querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", Math.abs(+b.dataset.v - d.c) < 0.005));
   const paid = P.pg_a + P.tcr + d.adder;
   $("adh").textContent = `World C only. With the federal transmission charge, a data center would pay ${m0(paid)} per MWh, ${pct((paid - P.pg_a) / P.pg_a)} more than the ${m0(P.pg_a)} it pays DTE today. The dial stops at $${cap}, just short of where on-site gas becomes cheaper than the grid: $${capR} with on-site gas restricted, $${capO} with it left open.`;
   $("gwo").textContent = d.gw.toFixed(1) + " GW"; $("ado").textContent = "$" + d.adder + " per MWh";
@@ -349,8 +360,8 @@ function draw(){
   $("tab").textContent = ""; $("tab").appendChild(t);
 }
 [`DTE Electric only. A snapshot at full load on DTE's own cost studies for a 2029 test year, not a year-by-year forecast. The two approved sites, Saline and Van Buren, are not in these numbers; their contracts are grandfathered in every world.`,
- `World A lets a shortfall from new load fall on other customers. Michigan's own orders already forbid a subsidy, so the step from A to B may be smaller than shown. The step from B to C is arithmetic: the adder times the energy sold.`,
- `What standard rates contribute is disputed. MPSC Staff's Van Buren figure, ${m2(P.case7)} per MWh, is the lowest positive number in the record and the default here. DTE's own studies put it near ${m0(P.case2)}.`,
+ `The slider starts at zero, so it does not show the case where new load costs more than it pays, which the federal floor is meant to stop. Michigan's own orders already forbid that subsidy, so the step from A to B rests mostly on the federal transmission charge. The step from B to C is arithmetic: the adder times the energy sold.`,
+ `What standard rates contribute is disputed. MPSC Staff's Van Buren figure, ${m2(P.case7)} per MWh, is the lowest positive number in the record and the default here. DTE's own cost studies put it at ${m2(P.case2)}, and DTE's claim for Saline at ${m2(P.case1)}.`,
  `The line bill is DTE's other customers' share of MISO's Tranche 1 and 2.1 lines at full phase-in, ${m2(P.ln_mid)} per MWh, about ${m0(P.lh_mid)} a household a year.`,
  `The adder's ceiling is where on-site gas becomes cheaper than DTE's grid: about ${m0(P.ceil_o)} per MWh today, and about ${m0(P.ceil_r)} if the statute makes on-site gas plants capture their carbon and get a certificate. The model does not go past it.`,
  `Load that goes to another state is a dial, set to zero by default because nothing in the record measures it. The statute cannot close that exit, and it matters most at a high adder, so the top of the range is the least reliable part of this page.`,
