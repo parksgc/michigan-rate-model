@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Michigan Rate Model Figures</title>
+<style>
+:root{
+  /* layout: one reading column, each figure a card with title, chart, legend, source, table */
+  color-scheme: light;
+  --page:#f9f9f7; --surface:#fcfcfb; --ink:#0b0b0b; --ink2:#52514e; --muted:#898781;
+  --grid:#e1e0d9; --axis:#c3c2b7; --ring:rgba(11,11,11,.10);
+  --contrib:#2a78d6; --tcredit:#eb6834; --adder:#1baf7a; --neg:#e34948;
+  --neutral:#c3c2b7; --neutral-ink:#0b0b0b; --wash:rgba(27,175,122,.12); --heat:#6250d6; --elec:#eda100; --co2:#e87ba4; --adder-line:#1baf7a; --contrib-ink:#fff; --tcredit-ink:#fff; --adder-ink:#fff; --contrib-halo:transparent; --tcredit-halo:transparent; --adder-halo:transparent; --neutral-halo:transparent; --open-dash:none;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme: dark;
+    --page:#0d0d0d; --surface:#1a1a19; --ink:#f0efec; --ink2:#c3c2b7; --muted:#898781;
+    --grid:#2c2c2a; --axis:#383835; --ring:rgba(255,255,255,.10);
+    --contrib:#3987e5; --tcredit:#d95926; --adder:#199e70; --neg:#e66767;
+    --neutral:#52514e; --neutral-ink:#ffffff; --wash:rgba(25,158,112,.16); --heat:#9085e9; --elec:#c98500; --co2:#d55181; --adder-line:#199e70; --contrib-ink:#fff; --tcredit-ink:#fff; --adder-ink:#fff; --contrib-halo:transparent; --tcredit-halo:transparent; --adder-halo:transparent; --neutral-halo:transparent; --open-dash:none;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --page:#0d0d0d; --surface:#1a1a19; --ink:#f0efec; --ink2:#c3c2b7; --muted:#898781;
+  --grid:#2c2c2a; --axis:#383835; --ring:rgba(255,255,255,.10);
+  --contrib:#3987e5; --tcredit:#d95926; --adder:#199e70; --neg:#e66767;
+  --neutral:#52514e; --neutral-ink:#ffffff; --wash:rgba(25,158,112,.16); --heat:#9085e9; --elec:#c98500; --co2:#d55181; --adder-line:#199e70; --contrib-ink:#fff; --tcredit-ink:#fff; --adder-ink:#fff; --contrib-halo:transparent; --tcredit-halo:transparent; --adder-halo:transparent; --neutral-halo:transparent; --open-dash:none;
+}
+:root[data-theme="print"]{
+  /* black and white: a three-step gray ramp, and a hatch for the statute's adder so it never rests on tone alone */
+  color-scheme: light;
+  --sans: "Times New Roman", "Liberation Serif", Times, serif;
+  --page:#fff; --surface:#fff; --ink:#000; --ink2:#1f1f1f; --muted:#4d4d4d;
+  --grid:#d9d9d9; --axis:#7a7a7a; --ring:transparent;
+  --contrib:#333333; --tcredit:#7d7d7d; --adder:url(#hatch); --neg:#7d7d7d;
+  --neutral:#b0b0b0; --neutral-ink:#000; --wash:rgba(0,0,0,.10); --heat:#333333; --elec:#b0b0b0; --co2:#333333; --adder-line:#000;
+  --contrib-ink:#fff; --tcredit-ink:#000; --adder-ink:#000; --contrib-halo:transparent; --tcredit-halo:transparent; --adder-halo:#fff; --neutral-halo:transparent; --open-dash:6 4;
+}
+:root[data-theme="print"] .chart [fill="var(--adder)"]{stroke:#000;stroke-width:.8}
+:root[data-theme="print"] .sw[style*="--adder)"]{background:repeating-linear-gradient(45deg,#000 0 1.4px,#fff 1.4px 4px) !important;outline:1px solid #000;outline-offset:-1px}
+:root[data-theme="print"] #tip .k{display:none}
+:root[data-theme="print"] .sw.line.open{background:repeating-linear-gradient(90deg,#000 0 5px,transparent 5px 8px) !important;width:21px}
+:root[data-theme="print"] figure{border-color:#bbb}
+:root[data-export] header, :root[data-export] .findings, :root[data-export] .notes, :root[data-export] details{display:none}
+:root[data-export] main{max-width:624px;padding:0;gap:48px}
+:root[data-export] figure{border:0;border-radius:0;padding:0 0 2px}
+:root[data-export="bare"] figure > .fignum, :root[data-export="bare"] figure > h2, :root[data-export="bare"] figure > .sub, :root[data-export="bare"] figure > .src{display:none}
+button.pill{background:none;font:inherit;font-size:12px;cursor:pointer}
+button.pill:hover{border-color:var(--ink2)}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--page);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.5}
+main{max-width:800px;margin:0 auto;padding:32px 16px 64px;display:flex;flex-direction:column;gap:28px}
+header h1{font-size:28px;line-height:1.2;margin:8px 0 8px;text-wrap:balance;font-weight:650}
+.kicker{display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:13px;color:var(--ink2)}
+.fignum .pill{margin-left:8px;text-transform:none;letter-spacing:0}
+.pill{border:1px solid var(--axis);border-radius:999px;padding:2px 10px;font-size:12px;color:var(--ink2)}
+header p{margin:0;color:var(--ink2);max-width:66ch}
+.findings{margin:0;padding:0;list-style:none;display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
+.findings li{background:var(--surface);border:1px solid var(--ring);border-radius:10px;padding:12px 14px}
+.findings b{display:block;font-size:22px;font-weight:650;line-height:1.2}
+.findings span{font-size:13px;color:var(--ink2)}
+figure{margin:0;background:var(--surface);border:1px solid var(--ring);border-radius:12px;padding:20px 20px 14px;display:flex;flex-direction:column;gap:12px}
+.fignum{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+figure h2{font-size:19px;line-height:1.3;margin:0;text-wrap:balance;font-weight:650}
+.sub{font-size:14px;color:var(--ink2);margin:0;max-width:66ch}
+.chart{width:100%}
+.chart svg{display:block;width:100%;height:auto;overflow:visible}
+.chart text{font-family:var(--sans)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13px;color:var(--ink2);margin:0;padding:0;list-style:none}
+.legend li{display:flex;align-items:center;gap:6px}
+.sw{width:12px;height:12px;border-radius:3px;flex:none}
+.sw.line{height:3px;width:16px;border-radius:2px}
+.tiers{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));margin:0;padding:0;list-style:none;font-size:13px;color:var(--ink2)}
+.tiers li{display:grid;grid-template-columns:12px 1fr;gap:8px;align-items:start}
+.tiers .sw{margin-top:4px}
+.tiers b{color:var(--ink);font-weight:600}
+.src{font-size:12px;color:var(--muted);margin:0}
+details{font-size:13px;color:var(--ink2)}
+summary{cursor:pointer;width:max-content;padding:2px 0;color:var(--ink2)}
+summary:focus-visible, .hit:focus-visible{outline:2px solid var(--contrib);outline-offset:2px}
+.tw{overflow-x:auto;margin-top:8px}
+table{border-collapse:collapse;font-size:13px;min-width:100%}
+th,td{padding:5px 10px;border-bottom:1px solid var(--grid);text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+th:first-child,td:first-child{text-align:left;white-space:normal}
+th{color:var(--ink2);font-weight:600}
+.notes{font-size:14px;color:var(--ink2)}
+.notes h2{font-size:16px;color:var(--ink);margin:0 0 6px}
+.notes ul{margin:0;padding-left:18px;display:grid;gap:6px;max-width:70ch}
+#tip{position:fixed;z-index:10;pointer-events:none;background:var(--surface);color:var(--ink);border:1px solid var(--axis);border-radius:8px;padding:8px 10px;font-size:12px;box-shadow:0 4px 14px rgba(0,0,0,.14);max-width:260px;display:none}
+#tip .t{color:var(--ink2);margin-bottom:4px}
+#tip .r{display:flex;justify-content:space-between;gap:14px;align-items:center}
+#tip .r b{font-weight:650}
+#tip .k{display:inline-block;width:12px;height:3px;border-radius:2px;margin-right:6px;vertical-align:middle}
+.hit{cursor:default}
+.hit:hover{filter:brightness(1.12)}
+@media print{body{background:#fff} figure{break-inside:avoid;border-color:#ccc} details{display:none}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
+  <pattern id="hatch" patternUnits="userSpaceOnUse" width="5" height="5" patternTransform="rotate(45)"><rect width="5" height="5" fill="#fff"/><rect width="1.7" height="5" fill="#000"/></pattern>
+</defs></svg>
+<main>
+<header>
+  <div class="kicker"><span>Checked Nov. 15, 2026</span><button class="pill" id="bw" type="button" aria-pressed="false">Show in black and white</button></div>
+  <h1>Michigan rate model: figures 1 to 10</h1>
+  <p>What data center load is worth to DTE Electric's other customers, and how far it goes toward the bill for Michigan's new regional lines, in three worlds: no federal permitting bill (A), the bill with no state action (B), and the bill plus the Michigan statute (C). Every number is read from the workbook, which is built on DTE's cost studies in Case U-22046, the Saline and Van Buren orders, and MISO's published line costs. Figure 7 adds what the bill's gas price effects could do to the same household, Figure 8 the carbon at stake in keeping data centers on the grid, and Figures 6 and 9 the exit to on-site gas and what moves the result.</p>
+</header>
+<ul class="findings" id="findings"></ul>
+
+<figure id="f1">
+  <div class="fignum">Figure 1</div>
+  <h2 id="f1t"></h2>
+  <p class="sub" id="f1s"></p>
+  <div class="chart" id="f1c"></div>
+  <ul class="legend">
+    <li><span class="sw" style="background:var(--contrib)"></span>Contribution at standard rates</li>
+    <li><span class="sw" style="background:var(--tcredit)"></span>Federal transmission charge, section 2107(a)</li>
+    <li><span class="sw" style="background:var(--adder)"></span>Adder under the statute, $10 per MWh</li>
+    <li><span class="sw" style="background:var(--neutral)"></span>Left for other customers</li>
+  </ul>
+  <p class="src">Sources: MISO, MTEP24 Appendix F at 16 to 17 (line cost per MWh); DTE Exhibits A-41 and A-42, Case U-22046; Van Buren order, Case U-22058, at 41 (Staff's figure); Grid Strategies (section 2107(a) charge). Model tab M2 Lines, section C.</p>
+  <details><summary>Show the numbers as a table</summary><div class="tw" id="f1tab"></div></details>
+</figure>
+
+<figure id="f2">
+  <div class="fignum">Figure 2</div>
+  <h2 id="f2t"></h2>
+  <p class="sub">What a megawatt-hour sold to a data center pays for. The first two tiers are DTE's own figures for Saline and Van Buren at present Rate D11. The third exists only if Lansing creates it.</p>
+  <div class="chart" id="f2c"></div>
+  <ul class="tiers" id="f2l"></ul>
+  <p class="src">Source: DTE Exhibits A-36, A-39, A-41 and A-42, Case U-22046 (hypothetical 2029 test year, production function). Model tab M1 Surplus, section A. The Attorney General objects that tier 1 counts almost no new capacity cost.</p>
+  <details><summary>Show the numbers as a table</summary><div class="tw" id="f2tab"></div></details>
+</figure>
+
+<figure id="f3">
+  <div class="fignum">Figure 3</div>
+  <h2 id="f3t"></h2>
+  <p class="sub">Dollars reaching other customers per megawatt-hour of data center energy, as each party to the Michigan dockets values it. Zero is the federal floor: the load pays its own incremental cost and nothing more.</p>
+  <div class="chart" id="f3c"></div>
+  <p class="src">Sources: Saline order, Case U-21990, at 9; Van Buren order, Case U-22058, at 41, 44, 46, 116 to 117; DTE Exhibit A-42, Case U-22046; Havumaki direct, Case U-22070, Ex. MNSAG-2 (1.5 GW at Consumers served by new gas plants). Present values are levelized at 7.05 percent. Model tab M1 Surplus, section B.</p>
+  <details><summary>Show the numbers as a table</summary><div class="tw" id="f3tab"></div></details>
+</figure>
+
+<figure id="f4">
+  <div class="fignum">Figure 4</div>
+  <h2 id="f4t"></h2>
+  <p class="sub" id="f4s"></p>
+  <div class="chart" id="f4c"></div>
+  <ul class="legend">
+    <li><span class="sw" style="background:var(--contrib)"></span>Contribution at standard rates</li>
+    <li><span class="sw" style="background:var(--tcredit)"></span>Federal transmission charge</li>
+    <li><span class="sw" style="background:var(--adder)"></span>Adder under the statute</li>
+    <li><span class="sw line" style="background:var(--ink2)"></span>Range across contribution cases</li>
+  </ul>
+  <p class="src">Bars use Staff's Van Buren figure for the contribution. The range runs from Havumaki's high shortfall (new gas plants must be built) to DTE's own cost studies. Reference lines: MPSC news release, Feb. 19, 2026 ($4.93 a month for a typical customer); Synapse for NRDC and Evergreen (Apr. 2026). Model tab M1 Surplus, section E.</p>
+  <details><summary>Show the numbers as a table</summary><div class="tw" id="f4tab"></div></details>
+</figure>
+
+<figure id="f5">
+  <div class="fignum">Figure 5</div>
+  <h2 id="f5t"></h2>
+  <p class="sub">New data center load on DTE's system at which the adder alone pays other customers' whole bill for Tranches 1 and 2.1. The band runs from the low to the high line cost.</p>
+  <div class="chart" id="f5c"></div>
+  <p class="src">Sources: MISO, MTEP24 Appendix F at 16 to 17; MISO Tranche 1 and 2.1 business cases (Zone 7 present-value costs). Load factor 90 percent. Model tab M2 Lines, section D.</p>
+  <details><summary>Show the numbers as a table</summary><div class="tw" id="f5tab"></div></details>
+</figure>
+
+<figure id="f6">
+  <div class="fignum">Figure 6<span class="pill">Illustrative: the exit function is assumed</span></div>
+  <h2 id="f6t"></h2>
+  <p class="sub" id="f6s"></p>
+  <div class="chart" id="f6c"></div>
+  <ul class="legend">
+    <li><span class="sw line" style="background:var(--adder-line)"></span>Exit restricted: the full statute</li>
+    <li><span class="sw line open" style="background:var(--ink2)"></span>Exit open: an adder alone</li>
+    <li><span class="sw" style="background:var(--wash)"></span>Range across the three assumed sensitivity cases</li>
+  </ul>
+  <p class="src">Sources for the prices: DTE Exhibit A-42, Case U-22046 (Rate D11); Rabobank (June 2026) and Modo Energy (Sept. 2026) for on-site gas and data center revenue; NETL for the cost of carbon capture. The share of load that exits at each price is assumed, in three cases. Model tab M3 Exit.</p>
+  <details><summary>Show the numbers as a table</summary><div class="tw" id="f6tab"></div></details>
+</figure>
+
+<figure id="f7">
+  <div class="fignum">Figure 7</div>
+  <h2 id="f7t"></h2>
+  <p class="sub" id="f7s"></p>
+  <div class="chart" id="f7c"></div>
+  <ul class="legend">
+    <li><span class="sw" style="background:var(--heat)"></span>Gas heating bill</li>
+    <li><span class="sw" style="background:var(--elec)"></span>Electric bill, DTE's own gas burn</li>
+    <li><span class="sw line" style="background:var(--ink2)"></span>Upper bound: gas sets the price of every kWh</li>
+  </ul>
+  <p class="src">Sources: ICF for API (May 2026), slides 12 to 14; Rhodium Group (Nov. 2 and 3, 2026); DOE LNG study summary (Dec. 2024), S-5; Energy Innovation (Feb. 2024); MPSC Winter Energy Appraisal 2025-2026 at 7 to 8; EIA Natural Gas Annual 2024, Table S24; DTE's 2025 Form 10-K. Price changes are dollars per MMBtu. Household: 97 MMBtu of gas and 8,092 kWh a year. Model tab M4 Gas.</p>
+  <details><summary>Show the numbers as a table</summary><div class="tw" id="f7tab"></div></details>
+</figure>
+
+<figure id="f8">
+  <div class="fignum">Figure 8</div>
+  <h2 id="f8t"></h2>
+  <p class="sub" id="f8s"></p>
+  <div class="chart" id="f8c"></div>
+  <ul class="legend">
+    <li><span class="sw" style="background:var(--co2)"></span>CO2 from the smokestack</li>
+    <li><span class="sw line" style="background:var(--muted)"></span>Typical on-site mix</li>
+  </ul>
+  <p class="src">Sources: EIA, Electric Power Annual 2024, Tables 8.2 and A.3 (heat rates; 52.91 kg of CO2 per MMBtu); EPA, eGRID2023, subregion RFCM; UCS, Data Center Power Play in Michigan (Jan. 2026) at 2 to 6; Rabobank (June 2026) for the on-site mix; 2023 PA 235. Load factor 90 percent. Model tab M5 Emissions.</p>
+  <details><summary>Show the numbers as a table</summary><div class="tw" id="f8tab"></div></details>
+</figure>
+
+<figure id="f9">
+  <div class="fignum">Figure 9</div>
+  <h2 id="f9t"></h2>
+  <p class="sub" id="f9s"></p>
+  <div class="chart" id="f9c"></div>
+  <ul class="legend">
+    <li><span class="sw" style="background:var(--neg)"></span>Below the base case</li>
+    <li><span class="sw" style="background:var(--contrib)"></span>Above the base case</li>
+  </ul>
+  <p class="src">Each bar changes one input and holds the others at the base case: 2 GW of new load, Staff's Van Buren contribution, a $10 adder credited per kWh, exit restricted, 90 percent load factor. Model tab Sensitivity.</p>
+  <details><summary>Show the numbers as a table</summary><div class="tw" id="f9tab"></div></details>
+</figure>
+
+<figure id="f10">
+  <div class="fignum">Figure 10</div>
+  <h2>The data centers arrive four to six years before the lines they would help pay for</h2>
+  <p class="sub">What is scheduled, 2027 to 2040. Saline ramps up through 2028 and Van Buren reaches full load that December. The regional lines enter service from 2032 to 2034, as DTE's coal retires and before the 2035 clean energy standard. A bar spans the period the source gives; a dot is a dated event.</p>
+  <div class="chart" id="f10c"></div>
+  <p class="src">Sources: Van Buren order, Case U-22058, at 106 and 120 (service dates; rate order in Case U-22046 due Feb. 28, 2027); DTE's second-quarter 2026 earnings report, as reported (Saline ramp); DTE's 2023 resource plan settlement, as approved (Monroe); press reports of DTE's Sept. 2026 resource plan (gas plants, 2031 and 2032); 2023 PA 235; MISO, MTEP24 (Tranche 2.1 in service 2032 to 2034).</p>
+</figure>
+
+<section class="notes">
+  <h2>Read these with the figures</h2>
+  <ul id="notes"></ul>
+</section>
+</main>
+<div id="tip" role="status"></div>
+<script>
+const D = {"sys_mwh":59875998.7,"ll_fc_mwh":19080658.1,"res_mwh":16817816.5,"o_bill":10903572,"g_bill":7884000,"o_kwmo":16596000,"g_kwmo":12000000,"res_cust":2078315,"res_rev":3266822,"prod_S1":-452904,"prod_S4":761,"resp_S1":-192620,"resp_S4":-837,"c1_prod":-30561,"c2_prod":-22098,"dist_S1":275817,"dist_S4":240710,"c1_dist":41089,"c2_dist":-1551,"resd_S4":126797,"resd_S6":127576,"rr_S1":3698053,"rev_S1":4150957,"rr_S4":3128848,"rate_S1":0.1941,"rate_S4":0.2064,"d11_margin":22.8,"sal_300":300,"sal_res":109,"vb_dte":1700,"vb_staff":860.3,"vb_abate":1000,"vb_mei":984,"vb_mei2":531,"vb_years":20,"abate_r":0.0705,"hav_lo":255,"hav_hi":833,"hav_gw":1.5,"hav_years":15,"hav_r":0.0705,"syn_hh":99,"cons_suf":473.7,"cons_mwh":7884000,"gs_incr":830,"gs_mw":16700,"r26_2025":1.77,"r26_2035":6,"t21_rate":5,"t1_pv":14183,"t1_z7":2939,"t1_r":0.069,"t21_pv":28525,"t21_z7":5608,"t21_r":0.071,"pv_years":20,"mi_sales":98991014,"z7_mwh":95000000,"inc_2026":4.93,"g_res_bcf":322.3,"g_res_cust":3441467,"g_heat":1.037,"g_share":0.77,"g_winter":210031,"g_2024":273737,"dte_gas":89,"dte_bund":40078,"ng_mw":2100,"ng_cf":0.55,"ng_hr":6.5,"mk_hr":7.5,"icf_chi":-0.22,"icf_win":-0.38,"icf_hh":-0.56,"rh_lo":0.08,"rh_hi":0.15,"rh_b_lo":0.76,"rh_b_hi":1.45,"lng25":5.5,"doe_k":0.03,"rh_hl_p":0.5,"rh_hl_c":0.43,"ei_lo":0.09,"ei_hi":0.14,"ei_base":3.54,"ei_mi":7,"doe_a":3.53,"doe_b":4.62,"hr_gt":10999,"hr_ic":8924,"hr_cc":7548,"co2_ng":52.91,"eg_tot":970.6,"eg_nb":1508.1,"lb_t":2204.62,"pa35":0.8,"rb_aero":0.36,"rb_eng":0.26,"rb_cc":0.26,"ucs_m_mt":11,"ucs_m_gw":2.2,"ucs_h_mt":25,"ucs_h_gw":5.3,"rhd_gas":0.82,"rhd_lo":0.31,"rhd_hi":0.4,"scc30":230,"mi_co2":50018,"ll1_rev":662632,"ll2_rev":475532,"os_lo":101,"os_mid":107,"os_hi":125,"rev_lo":9.7,"rev_hi":25,"m_share":0.3,"x_years":15,"cap_cost":61,"ts_cost":10,"cap_rate":0.9,"cert_y":1,"ex_e1":0.1,"ex_e2":0.2,"ex_e3":0.35,"ex_s1":1.5,"ex_s2":1,"ex_s3":0.5,"lf":0.9,"new_gw":2,"c_case":7,"adder":10,"rule":1,"line_case":2,"tol":0.15,"exit_case":2,"os_case":2,"deny":0,"reloc":0,"gw_a":2,"gw_b":5.5,"c_mid":7,"c_lo":10,"c_hi":2,"nonll":40795340.6,"ll_bill":18787572,"gw_appr":2.383,"lf_imp":0.9,"hh_kwh":8092.044036,"hh_bill":1571.860858,"twh_gw":7.884,"R":54.44397,"IC":30.29689,"margin":24.14708,"own":2.802864,"oth_prod":401.006,"oth_dist":4.431,"oth_tot":405.437,"c_study":21.580064,"res_ben":191.004,"sh_cos":0.471106,"sh_kwh":0.412248,"sh_add":0.412248,"tcr":6.303983,"crf_vb":0.09476,"crf_hav":0.110142,"case1":27.513919,"case2":21.580064,"case3":12.019287,"case4":11.826979,"case5":10.781329,"case6":6.382242,"case7":5.455987,"case8":0,"case9":-2.374946,"case10":-7.758157,"c_sel":5.455987,"c_mid_v":5.455987,"c_lo_v":-7.758157,"c_hi_v":21.580064,"ap_study_tot":405.437,"ap_study_res":191.004,"ap_study_hh":91.903297,"ap_claim_tot":385,"ap_claim_res":181.375997,"ap_claim_hh":87.270696,"ap_staff_tot":343.015,"ap_staff_res":161.596591,"ap_staff_hh":77.753657,"d_twh":15.768,"dA_con":86.03,"dB_con":86.03,"dC_con":86.03,"dA_tc":0,"dB_tc":53.816279,"dC_tc":53.816279,"dA_ad":0,"dB_ad":0,"dC_ad":157.68,"dA_tot":86.03,"dB_tot":139.846279,"dC_tot":297.526279,"dA_res":40.529291,"dB_res":62.714969,"dC_res":127.718307,"dA_hh":19.501034,"dB_hh":30.175873,"dC_hh":61.452815,"dA_pct":0.012406,"dB_pct":0.019198,"dC_pct":0.039096,"f4_gw_a_A_con":19.501034,"f4_gw_a_A_tc":0,"f4_gw_a_A_ad":0,"f4_gw_a_A_mid":19.501034,"f4_gw_a_A_lo":-27.729555,"f4_gw_a_A_hi":77.132435,"f4_gw_a_B_con":19.501034,"f4_gw_a_B_tc":10.674839,"f4_gw_a_B_ad":0,"f4_gw_a_B_mid":30.175873,"f4_gw_a_B_lo":10.674839,"f4_gw_a_B_hi":87.807274,"f4_gw_a_C_con":19.501034,"f4_gw_a_C_tc":10.674839,"f4_gw_a_C_ad":31.276942,"f4_gw_a_C_mid":61.452815,"f4_gw_a_C_lo":41.951781,"f4_gw_a_C_hi":119.084216,"f4_gw_b_A_con":53.627843,"f4_gw_b_A_tc":0,"f4_gw_b_A_ad":0,"f4_gw_b_A_mid":53.627843,"f4_gw_b_A_lo":-76.256277,"f4_gw_b_A_hi":212.114197,"f4_gw_b_B_con":53.627843,"f4_gw_b_B_tc":21.487093,"f4_gw_b_B_ad":0,"f4_gw_b_B_mid":75.114936,"f4_gw_b_B_lo":21.487093,"f4_gw_b_B_hi":233.60129,"f4_gw_b_C_con":53.627843,"f4_gw_b_C_tc":21.487093,"f4_gw_b_C_ad":86.011591,"f4_gw_b_C_mid":161.126526,"f4_gw_b_C_lo":107.498683,"f4_gw_b_C_hi":319.61288,"crf_t1":0.093661,"crf_t21":0.095128,"ln_lo":4.23,"ln_mid":7.486065,"ln_hi":8.513107,"ln_chk":5.615546,"ln_sel":7.486065,"lb_lo":172.564291,"lb_mid":305.396566,"lb_hi":347.295095,"lh_lo":34.229346,"lh_mid":60.577566,"lh_hi":68.888436,"la_lo":79.47143,"la_mid":140.644982,"la_hi":159.940608,"ln_new_lo":66.69864,"ln_new_mid":118.040271,"ln_new_hi":134.234669,"cv_s_lo":2.349484,"cv_s_mid":1.327576,"cv_s_hi":1.167414,"cv_f_lo":1.987752,"cv_f_mid":1.123179,"cv_f_hi":0.987676,"p1_bill":305.396566,"p1A_con":86.03,"p1B_con":86.03,"p1C_con":86.03,"p1A_tc":0,"p1B_tc":53.816279,"p1C_tc":53.816279,"p1A_ad":0,"p1B_ad":0,"p1C_ad":157.68,"p1A_left":219.366566,"p1B_left":165.550287,"p1C_left":7.870287,"p1A_cov":0.281699,"p1B_cov":0.457917,"p1C_cov":0.974229,"p2_bill":305.396566,"p2A_con":0,"p2B_con":0,"p2C_con":0,"p2A_tc":0,"p2B_tc":53.816279,"p2C_tc":53.816279,"p2A_ad":0,"p2B_ad":0,"p2C_ad":157.68,"p2A_left":305.396566,"p2B_left":251.580287,"p2C_left":93.900287,"p2A_cov":0,"p2B_cov":0.176218,"p2C_cov":0.69253,"f5_2_lb_lo":10.943956,"f5_2_lb_mid":19.368123,"f5_2_lb_hi":22.02531,"f5_3_lb_lo":7.29597,"f5_3_lb_mid":12.912082,"f5_3_lb_hi":14.68354,"f5_4_lb_lo":5.471978,"f5_4_lb_mid":9.684062,"f5_4_lb_hi":11.012655,"f5_5_lb_lo":4.377582,"f5_5_lb_mid":7.747249,"f5_5_lb_hi":8.810124,"f5_6_lb_lo":3.647985,"f5_6_lb_mid":6.456041,"f5_6_lb_hi":7.34177,"f5_8_lb_lo":2.735989,"f5_8_lb_mid":4.842031,"f5_8_lb_hi":5.506328,"f5_10_lb_lo":2.188791,"f5_10_lb_mid":3.873625,"f5_10_lb_hi":4.405062,"f5_12_lb_lo":1.823993,"f5_12_lb_mid":3.228021,"f5_12_lb_hi":3.670885,"f5_15_lb_lo":1.459194,"f5_15_lb_mid":2.582416,"f5_15_lb_hi":2.936708,"f5_20_lb_lo":1.094396,"f5_20_lb_mid":1.936812,"f5_20_lb_hi":2.202531,"f5_25_lb_lo":0.875516,"f5_25_lb_mid":1.54945,"f5_25_lb_hi":1.762025,"g_mmbtu":97.117043,"g_heat_hh":97.117043,"burn26":92.293,"ec26":2.302834,"e26_hh":18.634638,"burn_new":65.7657,"ec32":2.639767,"e32_hh":21.361113,"emk_hh":60.69033,"lng_bcfd":15.068493,"g1_dp":-0.22,"g1_heat":-21.36575,"g1_el":-4.09962,"g1_tot":-25.46537,"g1_tot32":-26.065194,"g1_totmk":-34.717622,"g1_elonly":-4.09962,"g1_netB":55.641243,"g1_netC":86.918185,"g2_dp":0.063649,"g2_heat":6.181433,"g2_el":1.186082,"g2_tot":7.367515,"g2_tot32":7.541053,"g2_totmk":10.044331,"g2_elonly":1.186082,"g2_netB":22.808358,"g2_netC":54.0853,"g3_dp":0.174419,"g3_heat":16.939019,"g3_el":3.250228,"g3_tot":20.189247,"g3_tot32":20.664795,"g3_totmk":27.524542,"g3_elonly":3.250228,"g3_netB":9.986626,"g3_netC":41.263568,"g4_dp":0.4956,"g4_heat":48.131207,"g4_el":9.235327,"g4_tot":57.366533,"g4_tot32":58.717774,"g4_totmk":78.209334,"g4_elonly":9.235327,"g4_netB":-27.19066,"g4_netC":4.086282,"g5_dp":1.09,"g5_heat":105.857577,"g5_el":20.311755,"g5_tot":126.169333,"g5_tot32":129.14119,"g5_totmk":172.010037,"g5_elonly":20.311755,"g5_netB":-95.99346,"g5_netC":-64.716518,"g3_alt":0.16613,"ei_k":0.042724,"ei_lo_dp":0.3186,"w_share":0.767273,"ei_chk":7.385955,"icf_w":-36.904476,"lng_share_B":0.669053,"lng_share_C":0.328532,"e_gt":0.581957,"m_gt":4.58815,"e_ic":0.472169,"m_ic":3.722579,"e_cc":0.399365,"m_cc":3.148591,"e_mix":0.495572,"m_mix":3.907089,"e_avg":0.440257,"m_avg":3.470988,"e_nb":0.684063,"m_nb":5.393156,"e_ucs":0.634196,"m_ucs":5,"e_pa":0.079873,"m_pa":0.629718,"e_cl":0,"m_cl":0,"av_gt_cl":4.58815,"av_gt_pa":3.958431,"av_gt_avg":1.117161,"av_gt_nb":-0.805007,"av_gt_ucs":-0.41185,"av_ic_cl":3.722579,"av_ic_pa":3.092861,"av_ic_avg":0.251591,"av_ic_nb":-1.670577,"av_ic_ucs":-1.277421,"av_cc_cl":3.148591,"av_cc_pa":2.518873,"av_cc_avg":-0.322397,"av_cc_nb":-2.244565,"av_cc_ucs":-1.851409,"av_mix_cl":3.907089,"av_mix_pa":3.277371,"av_mix_avg":0.4361,"av_mix_nb":-1.486068,"av_mix_ucs":-1.092911,"tot_a":7.814178,"tot_b":21.488989,"sh_a":0.156227,"sh_b":0.429625,"dmg_a":1797.260857,"dmg_b":4942.467358,"scc_mwh":113.981536,"scc_x":11.398154,"ucs100":0.570776,"ucsH":0.598298,"ucs_x":1.588012,"rh_chk":0.33919,"rh_mid":0.355,"pg_a":60.580686,"pg_b":66.884669,"c_os":107,"ceil_o":40.115331,"dc":31.667044,"ceil_r":71.782375,"pvf":9.07922,"mwh_mw":7884,"rev_mid":17.35,"add10":0.715806,"add_d_lo":10.450763,"add_d_hi":26.934957,"prem_pv":2.871478,"prem_w_lo":5.972675,"prem_w_hi":15.393492,"K":0.013752,"D0":0.551677,"mu1":-2.74416,"mu2":-0.834617,"mu3":0.242157,"mu_sel":-0.834617,"s_sel":1,"f6_0_1_eo":0.1,"f6_0_1_ro":38.7135,"f6_0_1_er":0.040925,"f6_0_1_rr":41.254598,"f6_0_2_eo":0.2,"f6_0_2_ro":34.412,"f6_0_2_er":0.056158,"f6_0_2_rr":40.59936,"f6_0_3_eo":0.35,"f6_0_3_ro":27.95975,"f6_0_3_er":0.029597,"f6_0_3_rr":41.741871,"f6_5_1_eo":0.104202,"f6_5_1_ro":73.845109,"f6_5_1_er":0.042763,"f6_5_1_rr":78.909838,"f6_5_2_eo":0.211229,"f6_5_2_ro":65.022335,"f6_5_2_er":0.059916,"f6_5_2_rr":77.49583,"f6_5_3_eo":0.381894,"f6_5_3_ro":50.953561,"f6_5_3_er":0.033813,"f6_5_3_rr":79.647604,"f6_10_1_eo":0.108559,"f6_10_1_ro":108.626511,"f6_10_1_er":0.044679,"f6_10_1_rr":116.410613,"f6_10_2_eo":0.222913,"f6_10_2_ro":94.691955,"f6_10_2_er":0.063908,"f6_10_2_rr":114.067463,"f6_10_3_eo":0.41484,"f6_10_3_ro":71.304712,"f6_10_3_er":0.038606,"f6_10_3_rr":117.150687,"f6_15_1_eo":0.113076,"f6_15_1_ro":143.038712,"f6_15_1_er":0.046677,"f6_15_1_rr":153.747134,"f6_15_2_eo":0.23505,"f6_15_2_ro":123.367256,"f6_15_2_er":0.068147,"f6_15_2_rr":150.284553,"f6_15_3_eo":0.448565,"f6_15_3_ro":88.932708,"f6_15_3_er":0.044047,"f6_15_3_rr":154.171368,"f6_20_1_eo":0.117755,"f6_20_1_ro":177.062105,"f6_20_1_er":0.04876,"f6_20_1_rr":190.909119,"f6_20_2_eo":0.247638,"f6_20_2_ro":150.995267,"f6_20_2_er":0.072646,"f6_20_2_rr":186.115388,"f6_20_3_eo":0.48277,"f6_20_3_ro":103.805528,"f6_20_3_er":0.050214,"f6_20_3_rr":190.617235,"f6_25_1_eo":0.122602,"f6_25_1_ro":210.67649,"f6_25_1_er":0.050931,"f6_25_1_rr":227.885775,"f6_25_2_eo":0.26067,"f6_25_2_ro":177.524151,"f6_25_2_er":0.077416,"f6_25_2_rr":221.526196,"f6_25_3_eo":0.517137,"f6_25_3_ro":115.94268,"f6_25_3_er":0.057194,"f6_25_3_rr":226.381884,"f6_30_1_eo":0.127619,"f6_30_1_ro":243.86109,"f6_30_1_er":0.053193,"f6_30_1_rr":264.665787,"f6_30_2_eo":0.274138,"f6_30_2_ro":202.90372,"f6_30_2_er":0.082472,"f6_30_2_rr":256.4811,"f6_30_3_eo":0.551343,"f6_30_3_ro":125.41543,"f6_30_3_er":0.065077,"f6_30_3_rr":261.343658,"f6_35_1_eo":0.13281,"f6_35_1_ro":276.594575,"f6_35_1_er":0.055549,"f6_35_1_rr":301.237299,"f6_35_2_eo":0.288031,"f6_35_2_ro":227.085982,"f6_35_2_er":0.087827,"f6_35_2_rr":290.942087,"f6_35_3_eo":0.58507,"f6_35_3_ro":132.344145,"f6_35_3_er":0.073962,"f6_35_3_rr":295.364537,"f6_40_1_eo":0.138179,"f6_40_1_ro":308.855088,"f6_40_1_er":0.058004,"f6_40_1_rr":337.587898,"f6_40_2_eo":0.302335,"f6_40_2_ro":250.025705,"f6_40_2_er":0.093494,"f6_40_2_rr":324.868994,"f6_40_3_eo":0.618018,"f6_40_3_ro":136.892936,"f6_40_3_er":0.08395,"f6_40_3_rr":328.289295,"f6_45_1_eo":0.143729,"f6_45_1_er":0.06056,"f6_45_1_rr":373.704602,"f6_45_2_eo":0.317033,"f6_45_2_er":0.099487,"f6_45_2_rr":358.219509,"f6_45_3_eo":0.649915,"f6_45_3_er":0.095149,"f6_45_3_rr":359.945072,"f6_50_1_eo":0.149463,"f6_50_1_er":0.063221,"f6_50_1_rr":409.573844,"f6_50_2_eo":0.332105,"f6_50_2_er":0.105819,"f6_50_2_rr":390.949199,"f6_50_3_eo":0.680526,"f6_50_3_er":0.107667,"f6_50_3_rr":390.141515,"f6_55_1_eo":0.155385,"f6_55_1_er":0.065991,"f6_55_1_rr":445.181461,"f6_55_2_eo":0.347529,"f6_55_2_er":0.112504,"f6_55_2_rr":423.01156,"f6_55_3_eo":0.709655,"f6_55_3_er":0.121609,"f6_55_3_rr":418.671695,"f6_60_1_eo":0.161497,"f6_60_1_er":0.068873,"f6_60_1_rr":480.512682,"f6_60_2_eo":0.36328,"f6_60_2_er":0.119555,"f6_60_2_rr":454.358095,"f6_60_3_eo":0.737155,"f6_60_3_er":0.13708,"f6_60_3_rr":445.313993,"f6_65_1_eo":0.167801,"f6_65_1_er":0.071872,"f6_65_1_rr":515.552115,"f6_65_2_eo":0.379329,"f6_65_2_er":0.126984,"f6_65_2_rr":484.938422,"f6_65_3_eo":0.76292,"f6_65_3_er":0.154174,"f6_65_3_rr":469.835174,"f6_70_1_eo":0.1743,"f6_70_1_er":0.07499,"f6_70_1_rr":550.283741,"f6_70_2_eo":0.395647,"f6_70_2_er":0.134805,"f6_70_2_rr":514.700425,"f6_70_3_eo":0.78689,"f6_70_3_er":0.172972,"f6_70_3_rr":491.99482,"f6_75_1_eo":0.180996,"f6_75_1_er":0.078233,"f6_75_2_eo":0.412201,"f6_75_2_er":0.143028,"f6_75_3_eo":0.809043,"f6_75_3_er":0.193538,"f6_80_1_eo":0.187891,"f6_80_1_er":0.081603,"f6_80_2_eo":0.428956,"f6_80_2_er":0.151664,"f6_80_3_eo":0.829392,"f6_80_3_er":0.21591,"xA":0.186489,"xB":0.2,"xCo":0.222913,"xCr":0.063908,"stA":1.627022,"stB":1.6,"stCo":1.554174,"stCr":1.872184,"hA":15.864309,"hB":24.140698,"hCo":47.754193,"hCr":57.525474,"cA":1.457257,"cB":1.562836,"cCo":1.741881,"cCr":0.49939,"rvCo":94.691955,"rvCr":114.067463,"a10_r":45.415303,"a10_o":-58.967003,"x_per10":0.024725,"a1_m":91.903297,"a1_p":99,"a1_ratio":0.928316,"a2_m":1.135724,"a2_p":1.23,"a2_ratio":0.923353,"a3_m":110.851251,"a3_p":109,"a3_ratio":1.016984,"a4_m":405.437,"a4_p":385,"a4_ratio":1.053083,"a5_m":24.14708,"a5_p":22.8,"a5_ratio":1.059082,"a6_m":5.615546,"a6_p":5,"a6_ratio":1.123109,"a7_m":235.299778,"a7_p":300,"a7_ratio":0.784333,"a8_m":170.137222,"a8_p":85,"a8_ratio":2.001614,"a9_m":7.385955,"a9_p":7,"a9_ratio":1.055136,"a10_m":0.33919,"a10_p":0.355,"a10_ratio":0.955464,"H0":57.525474,"s_c_lo":39.270717,"s_c_hi":111.473755,"s_gw_lo":29.346593,"s_gw_hi":150.829216,"s_a_lo":43.069335,"s_a_hi":85.993346,"s_sh_lo":57.525474,"s_sh_hi":99.267877,"s_x_lo":47.754193,"s_x_hi":57.525474,"s_xs_lo":59.080378,"s_xs_hi":58.707151,"s_t_lo":47.786453,"s_t_hi":67.129576,"s_lf_lo":52.116733,"s_lf_hi":57.525474,"s_g_lo":37.336228,"s_g_hi":82.990844,"a1_res":"Reproduced","a2_res":"Reproduced","a3_res":"Reproduced","a4_res":"Reproduced","a5_res":"Reproduced","a6_res":"Reproduced","a7_res":"Outside tolerance","a8_res":"Outside tolerance","a9_res":"Reproduced","a10_res":"Reproduced"};
+{ const hp = new URLSearchParams(location.hash.slice(1)), root = document.documentElement;
+  if (hp.get("theme")) root.dataset.theme = hp.get("theme");
+  if (hp.get("export")) root.dataset.export = hp.get("export"); }
+const NS = "http://www.w3.org/2000/svg";
+const $ = id => document.getElementById(id);
+const css = v => `var(--${v})`;
+function el(tag, attrs, parent, text){ const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (text != null) e.textContent = text; if (parent) parent.appendChild(e); return e; }
+function h(tag, parent, text, cls){ const e = document.createElement(tag); if (text != null) e.textContent = text; if (cls) e.className = cls; if (parent) parent.appendChild(e); return e; }
+const m0 = v => (v < 0 ? "−$" : "$") + Math.abs(Math.round(v)).toLocaleString("en-US");
+const m1 = v => (v < 0 ? "−$" : "$") + Math.abs(v).toFixed(1);
+const m2 = v => (v < 0 ? "−$" : "$") + Math.abs(v).toFixed(2);
+const pct = v => Math.round(v * 100) + "%";
+const tw = s => s.length * 6.3 + 12;   // rough text width at 12px
+
+/* ---------- tooltip ---------- */
+const tip = $("tip");
+function showTip(evt, title, rows){
+  tip.textContent = "";
+  h("div", tip, title, "t");
+  rows.forEach(r => { const d = h("div", tip, null, "r"); const l = h("span", d);
+    if (r.c){ const k = h("span", l, null, "k"); k.style.background = `var(--${r.c})`; }
+    l.appendChild(document.createTextNode(r.l)); h("b", d, r.v); });
+  tip.style.display = "block";
+  let x, y;
+  if (evt.clientX != null && evt.type !== "focus"){ x = evt.clientX + 14; y = evt.clientY + 14; }
+  else { const b = evt.target.getBoundingClientRect(); x = b.left + b.width / 2; y = b.bottom + 8; }
+  const w = tip.offsetWidth, hh = tip.offsetHeight;
+  tip.style.left = Math.max(8, Math.min(x, innerWidth - w - 8)) + "px";
+  tip.style.top = Math.max(8, Math.min(y, innerHeight - hh - 8)) + "px";
+}
+function hideTip(){ tip.style.display = "none"; }
+function hit(node, label, title, rows){
+  node.setAttribute("class", "hit"); node.setAttribute("tabindex", "0"); node.setAttribute("role", "img"); node.setAttribute("aria-label", label);
+  node.addEventListener("pointermove", e => showTip(e, title, rows));
+  node.addEventListener("pointerleave", hideTip);
+  node.addEventListener("focus", e => showTip(e, title, rows));
+  node.addEventListener("blur", hideTip);
+}
+function table(id, head, rows){
+  const t = document.createElement("table"); const tr = h("tr", h("thead", t)); head.forEach(x => h("th", tr, x));
+  const tb = h("tbody", t); rows.forEach(r => { const row = h("tr", tb); r.forEach(x => h("td", row, x)); });
+  const box = $(id); box.textContent = ""; box.appendChild(t);
+}
+function svgIn(id, W, H, label){ const box = $(id); box.textContent = ""; return el("svg", {viewBox:`0 0 ${W} ${H}`, width:W, height:H, role:"group", "aria-label":label}, box); }
+const T = (svg, x, y, s, o={}) => el("text", Object.assign({x, y, "font-size":12, fill:css("ink2")}, o), svg, s);
+
+/* ---------- headline numbers ---------- */
+(function(){
+  const f = $("findings");
+  [[m0(D.margin) + " per MWh", "what Saline and Van Buren pay above their incremental cost, in DTE's own cost studies"],
+   [m0(D.ap_study_hh) + " a year", "per household from the two approved contracts, in every world"],
+   [m0(D.dC_hh) + " a year", "per household from 2 GW of new load under the statute, against " + m0(D.dB_hh) + " under the federal bill alone"],
+   [D.f5_10_lb_mid.toFixed(1) + " GW", "of new load at which a $10 adder pays other customers' whole bill for the new lines"]
+  ].forEach(([b, s]) => { const li = h("li", f); h("b", li, b); h("span", li, s); });
+})();
+
+/* ---------- Figure 1: who pays for the lines ---------- */
+function fig1(){
+  const W = $("f1c").clientWidth, bill = D.p1_bill, bh = 22, rowH = 50, padT = 22;
+  const panels = [["p1", "If new load contributes what MPSC Staff found for Van Buren (" + m2(D.c_mid_v) + " per MWh)"], ["p2", "If new load pays only its incremental cost (the federal floor, nothing above it)"]];
+  const worlds = [["A", "World A: no BAAJA"], ["B", "World B: BAAJA only"], ["C", "World C: BAAJA plus the statute"]];
+  const H = panels.length * (padT + 3 * rowH) + 34;
+  const svg = svgIn("f1c", W, H, "Stacked bars: other customers' line bill and what new data center load pays toward it");
+  const x = v => v / bill * W;
+  let y = 0;
+  const gl = [0, 100, 200, 300].map(t => el("line", {x1:x(t), x2:x(t), y1:8, y2:0, stroke:css("grid"), "stroke-width":1}, svg));
+  panels.forEach(([tag, title]) => {
+    const pt = T(svg, 0, y + 12, title, {fill:css("ink"), "font-weight":600, "font-size":13});
+    if (tw(title) * 1.05 > W){ pt.textContent = ""; const words = title.split(" "); let line = "", dy = 0; const out = [];
+      words.forEach(w => { if (tw(line + " " + w) * 1.05 > W){ out.push(line); line = w; } else line = line ? line + " " + w : w; }); out.push(line);
+      out.forEach((ln, i) => el("tspan", {x:0, dy: i ? 15 : 0}, pt, ln)); y += (out.length - 1) * 15; }
+    y += padT;
+    worlds.forEach(([w, wl]) => {
+      T(svg, 0, y + 12, wl);
+      const segs = [["con", "contrib", "Contribution"], ["tc", "tcredit", "Federal transmission charge"], ["ad", "adder", "Adder"], ["left", "neutral", "Left for other customers"]];
+      const by = y + 18; let cx = 0; const id = `clip${tag}${w}`;
+      const cp = el("clipPath", {id}, svg); el("rect", {x:0, y:by, width:W, height:bh, rx:4}, cp);
+      const g = el("g", {"clip-path":`url(#${id})`}, svg);
+      const cov = D[`${tag}${w}_cov`];
+      segs.forEach(([k, col, name]) => {
+        const v = D[`${tag}${w}_${k}`]; if (!(v > 0.05)) return;
+        const wv = x(v), gap = cx > 0 ? 2 : 0;
+        const r = el("rect", {x:cx + gap, y:by, width:Math.max(0, wv - gap), height:bh, fill:css(col)}, g);
+        const lab = k === "left" ? m0(v) + "M left" : m0(v) + "M";
+        if (tw(lab) < wv - gap) T(svg, cx + gap + 6, by + 15, lab, {fill:css(col + "-ink"), stroke:css(col + "-halo"), "stroke-width":3, "paint-order":"stroke", "font-weight":600, "pointer-events":"none"});
+        hit(r, `${wl}: ${name}, ${m0(v)} million a year`, wl, [{l:name, v:m1(v) + "M a year", c:col}, {l:"Share of the line bill covered", v:pct(cov)}]);
+        cx += wv;
+      });
+      y += rowH;
+    });
+  });
+  const HH = y + 22; svg.setAttribute("viewBox", `0 0 ${W} ${HH}`); svg.setAttribute("height", HH);
+  gl.forEach(l => l.setAttribute("y2", y - 6));
+  [0, 100, 200, 300].forEach(t => T(svg, x(t), HH - 6, t === 0 ? "$0" : "$" + t + "M", {fill:css("muted"), "text-anchor": t === 0 ? "start" : t === 300 ? "end" : "middle", "font-size":11}));
+  $("f1t").textContent = `With the statute, 2 GW of new data centers covers ${pct(D.p1C_cov)} of what DTE's other customers owe for the new lines`;
+  $("f1s").textContent = `Other customers' annual bill for MISO's Tranche 1 and 2.1 lines, ${m0(bill)} million at the central line cost (${m0(D.lh_mid)} per household), and what new data center load pays toward it. Even if new load brings no contribution at all, the adder and the federal charge cover ${pct(D.p2C_cov)}.`;
+  const rows = []; panels.forEach(([tag, title]) => worlds.forEach(([w, wl]) => rows.push([(tag === "p1" ? "Staff case. " : "Floor only. ") + wl, m1(D[`${tag}${w}_con`]), m1(D[`${tag}${w}_tc`]), m1(D[`${tag}${w}_ad`]), m1(D[`${tag}${w}_left`]), pct(D[`${tag}${w}_cov`])])));
+  table("f1tab", ["$M a year", "Contribution", "Federal charge", "Adder", "Left for others", "Covered"], rows);
+}
+
+/* ---------- Figure 2: three tiers ---------- */
+function fig2(){
+  const W = $("f2c").clientWidth, H = 74, bh = 28;
+  const parts = [["Tier 1: incremental cost", D.IC, "neutral", "The floor. Section 229(b)(1) of the federal bill guarantees it; Michigan's 2024 no-subsidy rule already aims at it."],
+                 ["Tier 2: contribution", D.margin, "contrib", "What standard rates collect above incremental cost. It exists today. DTE calls it the affordability benefit or excess sales margin."],
+                 ["Tier 3: adder", D.adder, "adder", "A charge above the standard rate, credited to other customers. Section 229(c)(1) permits it; only a Michigan statute creates it."]];
+  const tot = parts.reduce((a, p) => a + p[1], 0), x = v => v / tot * W;
+  const svg = svgIn("f2c", W, H, "Segmented bar: three tiers of money per megawatt-hour");
+  let cx = 0;
+  parts.forEach(([n, v, col], i) => {
+    const wv = x(v), gap = i ? 2 : 0;
+    const r = el("rect", {x:cx + gap, y:22, width:wv - gap, height:bh, rx:4, fill:css(col)}, svg);
+    const lab = m2(v); if (tw(lab) < wv) T(svg, cx + gap + 7, 22 + 18, lab, {fill:css(col + "-ink"), stroke:css(col + "-halo"), "stroke-width":3, "paint-order":"stroke", "font-weight":600, "font-size":13, "pointer-events":"none"});
+    hit(r, `${n}: ${m2(v)} per megawatt-hour`, n, [{l:"Per MWh", v:m2(v), c:col}, {l:"Share of the world C price", v:pct(v / tot)}]);
+    cx += wv;
+  });
+  const std = D.IC + D.margin;
+  el("line", {x1:0, x2:x(std) - 1, y1:14, y2:14, stroke:css("axis"), "stroke-width":1}, svg);
+  T(svg, 0, 9, `Standard rate today: ${m2(std)}`, {"font-size":11.5});
+  el("line", {x1:0, x2:W, y1:60, y2:60, stroke:css("axis"), "stroke-width":1}, svg);
+  T(svg, W, 72, `With the statute: ${m2(tot)} per MWh`, {"text-anchor":"end", "font-size":11.5});
+  const l = $("f2l"); l.textContent = "";
+  parts.forEach(([n, v, col, note]) => { const li = h("li", l); const s = h("span", li, null, "sw"); s.style.background = `var(--${col})`; const d = h("div", li); h("b", d, n); d.appendChild(document.createTextNode(". " + note)); });
+  $("f2t").textContent = `A data center on DTE's standard rate already pays ${m0(D.margin)} per MWh above its cost. The statute adds a third tier.`;
+  table("f2tab", ["Tier", "$ per MWh"], parts.map(p => [p[0], m2(p[1])]).concat([["Production revenue at present Rate D11 (tiers 1 and 2)", m2(std)], ["Of tier 2, returns to the data centers if their rate is reset to embedded cost", m2(D.own)], ["Of tier 2, reaches other classes (with distribution)", m2(D.c_study)]]));
+}
+
+/* ---------- Figure 3: what the parties say ---------- */
+function fig3(){
+  const W = $("f3c").clientWidth;
+  const rows = [["Saline: DTE's claim", D.case1], ["Both contracts: DTE's cost studies", D.case2], ["Van Buren: ABATE", D.case3], ["Van Buren: MEICEO", D.case4], ["Van Buren: DTE's claim", D.case5],
+    ["Van Buren: MEICEO, no storage pull-ahead", D.case6], ["Van Buren: MPSC Staff", D.case7], ["Consumers with new gas: Havumaki, low", D.case9], ["Consumers with new gas: Havumaki, high", D.case10]];
+  const rowH = 36, top = 26, H = top + rows.length * rowH + 30, lo = -10, hi = 30, padR = 50;
+  const x = v => (v - lo) / (hi - lo) * (W - padR);
+  const svg = svgIn("f3c", W, H, "Bars about zero: contribution per megawatt-hour by party");
+  [-10, 0, 10, 20, 30].forEach(t => { el("line", {x1:x(t), x2:x(t), y1:top - 6, y2:H - 26, stroke:css(t === 0 ? "axis" : "grid"), "stroke-width":1}, svg);
+    T(svg, x(t), H - 10, (t < 0 ? "−$" : "$") + Math.abs(t), {fill:css("muted"), "text-anchor": t === lo ? "start" : "middle", "font-size":11}); });
+  T(svg, x(0) + 5, 10, "Federal floor", {"font-size":11.5, fill:css("ink2")});
+  T(svg, x(0) - 5, 10, "Shortfall", {"font-size":11.5, fill:css("muted"), "text-anchor":"end"});
+  rows.forEach(([n, v], i) => {
+    const y = top + i * rowH, col = v < 0 ? "neg" : "contrib";
+    T(svg, 0, y + 11, n, {fill:css("ink"), "font-size":12, stroke:css("surface"), "stroke-width":4, "paint-order":"stroke", "stroke-linejoin":"round"});
+    const x0 = Math.min(x(0), x(v)), wv = Math.abs(x(v) - x(0));
+    const r = el("rect", {x:x0, y:y + 17, width:Math.max(wv, 1), height:8, rx:3, fill:css(col)}, svg);
+    el("circle", {cx:x(v), cy:y + 21, r:5, fill:css(col), stroke:css("surface"), "stroke-width":2, "pointer-events":"none"}, svg);
+    T(svg, v < 0 ? x(0) + 8 : x(v) + 10, y + 25, m2(v), {fill:css("ink"), "font-weight":600});
+    const hr = el("rect", {x:0, y:y, width:W, height:rowH - 2, fill:"transparent"}, svg);
+    hit(hr, `${n}: ${m2(v)} per megawatt-hour`, n, [{l:"Per MWh of data center energy", v:m2(v), c:col}, {l:"On 2 GW of new load", v:m0(v * 2 * D.twh_gw) + "M a year"}]);
+  });
+  $("f3t").textContent = `The record values a data center's contribution anywhere from ${m0(D.case10)} to ${m0(D.case1)} per MWh. The statute's adder does not depend on who is right.`;
+  table("f3tab", ["Party and contract", "$ per MWh", "On 2 GW of new load, $M a year"], rows.map(([n, v]) => [n, m2(v), m1(v * 2 * D.twh_gw)]));
+}
+
+/* ---------- Figure 4: household credit ---------- */
+function fig4(){
+  const W = $("f4c").clientWidth, narrow = W < 520, mL = 40, mR = narrow ? 8 : 196, top = narrow ? 44 : 14, plotH = 270, H = top + plotH + 62;
+  const lo = -100, hi = 350, y = v => top + (hi - v) / (hi - lo) * plotH;
+  const svg = svgIn("f4c", W, H, "Stacked columns: dollars per household per year by world and load case");
+  [-100, 0, 100, 200, 300].forEach(t => { el("line", {x1:mL, x2:W - mR, y1:y(t), y2:y(t), stroke:css(t === 0 ? "axis" : "grid"), "stroke-width":1}, svg);
+    T(svg, mL - 6, y(t) + 4, (t < 0 ? "−$" : "$") + Math.abs(t), {fill:css("muted"), "text-anchor":"end", "font-size":11}); });
+  const refs = [[D.syn_hh, "Synapse, 1 GW at Consumers", "Synapse, 1 GW"], [D.inc_2026 * 12, "DTE's 2026 rate increase", "2026 increase"]];
+  refs.forEach(([v, long, short], i) => { el("line", {x1:mL, x2:W - mR, y1:y(v), y2:y(v), stroke:css("muted"), "stroke-width":1, "stroke-dasharray":"4 3"}, svg);
+    if (narrow) T(svg, mL + (i ? 140 : 0), 28, `${m0(v)} ${short}`, {"font-size":11});
+    else { const t = T(svg, W - mR + 6, y(v) + 4, m0(v), {"font-size":11.5, fill:css("ink"), "font-weight":600}); T(svg, W - mR + 34, y(v) + 4, long, {"font-size":11.5}); } });
+  if (narrow) T(svg, mL, 12, "Dashed lines, top to bottom:", {"font-size":11, fill:css("muted")});
+  const groups = [["gw_a", "2 GW of new load"], ["gw_b", "5.5 GW of new load"]], pw = W - mL - mR, gw = pw / 2, bw = Math.min(24, gw / 6), step = Math.min(64, (gw - 20) / 3);
+  const rows = [];
+  groups.forEach(([gk, gl], gi) => {
+    const gc = mL + gw * gi + gw / 2;
+    ["A", "B", "C"].forEach((w, wi) => {
+      const cx = gc + (wi - 1) * step, v = k => D[`f4_${gk}_${w}_${k}`];
+      let base = 0; const tot = v("mid");
+      [["con", "contrib", "Contribution"], ["tc", "tcredit", "Federal transmission charge"], ["ad", "adder", "Adder"]].forEach(([k, col]) => {
+        const val = v(k); if (!(val > 0.05)) return; const y1 = y(base + val), y0 = y(base), top = k === (v("ad") > 0.05 ? "ad" : v("tc") > 0.05 ? "tc" : "con");
+        const hgt = y0 - y1 - (base > 0 ? 2 : 0);
+        if (top) el("path", {d:`M${cx - bw / 2},${y1 + hgt} v${-(hgt - 4)} q0,-4 4,-4 h${bw - 8} q4,0 4,4 v${hgt - 4} z`, fill:css(col)}, svg);
+        else el("rect", {x:cx - bw / 2, y:y1, width:bw, height:hgt, fill:css(col)}, svg);
+        base += val; });
+      const wx = cx + bw / 2 + 7;
+      el("line", {x1:wx, x2:wx, y1:y(v("hi")), y2:y(v("lo")), stroke:css("ink2"), "stroke-width":1.5}, svg);
+      [v("hi"), v("lo")].forEach(e => el("line", {x1:wx - 4, x2:wx + 4, y1:y(e), y2:y(e), stroke:css("ink2"), "stroke-width":1.5}, svg));
+      T(svg, cx, top + plotH + 16, w, {"text-anchor":"middle", fill:css("ink"), "font-weight":600});
+      T(svg, cx, top + plotH + 31, m0(tot), {"text-anchor":"middle"});
+      const hr = el("rect", {x:cx - step / 2, y:top, width:step, height:plotH, fill:"transparent"}, svg);
+      hit(hr, `${gl}, world ${w}: ${m0(tot)} per household per year, range ${m0(v("lo"))} to ${m0(v("hi"))}`, `${gl}, world ${w}`,
+        [{l:"Contribution", v:m1(v("con")), c:"contrib"}, {l:"Federal transmission charge", v:m1(v("tc")), c:"tcredit"}, {l:"Adder", v:m1(v("ad")), c:"adder"}, {l:"Total per household", v:m1(tot)}, {l:"Range", v:m0(v("lo")) + " to " + m0(v("hi"))}]);
+      rows.push([`${gl}, world ${w}`, m1(v("con")), m1(v("tc")), m1(v("ad")), m1(tot), m1(v("lo")), m1(v("hi"))]);
+    });
+    T(svg, gc, top + plotH + 52, gl, {"text-anchor":"middle", fill:css("ink2")});
+  });
+  $("f4t").textContent = `The federal floor removes the downside. The statute doubles the credit.`;
+  $("f4s").textContent = `Dollars per DTE household per year from new data center load, at a $10 adder credited per kWh to all other customers. At 2 GW the credit is ${m0(D.f4_gw_a_A_mid)} with no federal bill, ${m0(D.f4_gw_a_B_mid)} with the bill alone, and ${m0(D.f4_gw_a_C_mid)} with the statute. If new gas plants must be built, households lose ${m0(-D.f4_gw_a_A_lo)} without the floor and still gain with it.`;
+  table("f4tab", ["$ per household a year", "Contribution", "Federal charge", "Adder", "Total", "Low case", "High case"], rows);
+}
+
+/* ---------- Figure 5: GW needed vs adder ---------- */
+function fig5(){
+  const W = $("f5c").clientWidth, narrow = W < 520, mL = 40, mR = 16, top = 30, plotH = 250, H = top + plotH + 44;
+  const x0 = 2, x1 = 25, yh = 24, x = a => mL + (a - x0) / (x1 - x0) * (W - mL - mR), y = g => top + (yh - g) / yh * plotH;
+  const gw = (k, a) => D[k] / (a * D.twh_gw);
+  const svg = svgIn("f5c", W, H, "Line: gigawatts of new load at which the adder covers the line bill");
+  [0, 4, 8, 12, 16, 20, 24].forEach(t => { el("line", {x1:mL, x2:W - mR, y1:y(t), y2:y(t), stroke:css(t === 0 ? "axis" : "grid"), "stroke-width":1}, svg); T(svg, mL - 6, y(t) + 4, String(t), {fill:css("muted"), "text-anchor":"end", "font-size":11}); });
+  T(svg, 0, 12, "GW of new load", {fill:css("muted"), "font-size":11});
+  [5, 10, 15, 20, 25].forEach(t => T(svg, x(t), top + plotH + 16, "$" + t, {fill:css("muted"), "text-anchor":"middle", "font-size":11}));
+  T(svg, (mL + W - mR) / 2, top + plotH + 36, "Adder, dollars per MWh", {"text-anchor":"middle", "font-size":11.5});
+  const as = []; for (let a = x0; a <= x1 + 1e-9; a += 0.25) as.push(a);
+  const band = as.map(a => `${x(a)},${y(Math.min(yh, gw("lb_hi", a)))}`).concat(as.slice().reverse().map(a => `${x(a)},${y(gw("lb_lo", a))}`)).join(" ");
+  el("polygon", {points:band, fill:css("wash")}, svg);
+  el("polyline", {points:as.map(a => `${x(a)},${y(gw("lb_mid", a))}`).join(" "), fill:"none", stroke:css("adder-line"), "stroke-width":2, "stroke-linejoin":"round", "stroke-linecap":"round"}, svg);
+  [[D.gw_a, "2 GW: mid case"], [D.gw_b, "5.5 GW of new load: high case"]].forEach(([g, a]) => {
+    el("line", {x1:mL, x2:W - mR, y1:y(g), y2:y(g), stroke:css("muted"), "stroke-width":1, "stroke-dasharray":"4 3"}, svg);
+    if (g < 3) T(svg, mL + 6, y(g) - 5, a, {"font-size":11.5, fill:css("ink2")});
+    else T(svg, W - mR, y(g) - 5, a, {"font-size":11.5, fill:css("ink2"), "text-anchor":"end"}); });
+  [5, 10, 20].forEach(a => { const g = gw("lb_mid", a); el("circle", {cx:x(a), cy:y(g), r:5, fill:css("adder-line"), stroke:css("surface"), "stroke-width":2}, svg);
+    T(svg, x(a) + 8, y(g) - 8, g.toFixed(1) + " GW", {fill:css("ink"), "font-weight":600, stroke:css("surface"), "stroke-width":4, "paint-order":"stroke", "stroke-linejoin":"round"}); });
+  const cross = el("line", {x1:0, x2:0, y1:top, y2:top + plotH, stroke:css("axis"), "stroke-width":1, visibility:"hidden"}, svg);
+  const dot = el("circle", {r:5, fill:css("adder-line"), stroke:css("surface"), "stroke-width":2, visibility:"hidden"}, svg);
+  const ov = el("rect", {x:mL, y:top, width:W - mL - mR, height:plotH, fill:"transparent", tabindex:0, role:"img", "aria-label":"Hover or use the table below for values at each adder", class:"hit"}, svg);
+  function at(a, e){ a = Math.max(x0, Math.min(x1, Math.round(a * 2) / 2)); cross.setAttribute("x1", x(a)); cross.setAttribute("x2", x(a)); cross.setAttribute("visibility", "visible");
+    dot.setAttribute("cx", x(a)); dot.setAttribute("cy", y(gw("lb_mid", a))); dot.setAttribute("visibility", "visible");
+    showTip(e, `Adder of ${m2(a)} per MWh`, [{l:"Central line cost", v:gw("lb_mid", a).toFixed(1) + " GW", c:"adder-line"}, {l:"Low line cost", v:gw("lb_lo", a).toFixed(1) + " GW"}, {l:"High line cost", v:gw("lb_hi", a).toFixed(1) + " GW"}]); }
+  ov.addEventListener("pointermove", e => { const b = svg.getBoundingClientRect(); at(x0 + ((e.clientX - b.left) * (W / b.width) - mL) / (W - mL - mR) * (x1 - x0), e); });
+  ov.addEventListener("pointerleave", () => { hideTip(); cross.setAttribute("visibility", "hidden"); dot.setAttribute("visibility", "hidden"); });
+  ov.addEventListener("focus", e => at(10, e)); ov.addEventListener("blur", () => { hideTip(); cross.setAttribute("visibility", "hidden"); dot.setAttribute("visibility", "hidden"); });
+  $("f5t").textContent = `A $10 adder pays the whole line bill at about ${Math.round(gw("lb_mid", 10))} GW of new load. At $20, DTE's mid case is enough.`;
+  table("f5tab", ["Adder, $ per MWh", "Low line cost, GW", "Central, GW", "High, GW"], [2, 3, 4, 5, 6, 8, 10, 12, 15, 20, 25].map(a => ["$" + a, D[`f5_${a}_lb_lo`].toFixed(1), D[`f5_${a}_lb_mid`].toFixed(1), D[`f5_${a}_lb_hi`].toFixed(1)]));
+}
+
+/* ---------- Figure 7: gas prices and the household bill ---------- */
+function fig7(){
+  const W = $("f7c").clientWidth, padR = 46, lo = -50, hi = 180, x = v => (v - lo) / (hi - lo) * (W - padR);
+  const groups = [["What the federal bill could do", [["g1", "Pipelines: ICF, Chicago price down $0.22"], ["g2", "Added LNG exports, low: up $0.06"], ["g3", "Added LNG exports, high: up $0.17"]]],
+                  ["Outer cases, not estimates of the bill", [["g4", "Every pending LNG project built: up $0.50"], ["g5", "Unconstrained exports by 2050: up $1.09"]]]];
+  const rowH = 38, headH = 26, top = 34; let H = top + 30; groups.forEach(g => H += headH + g[1].length * rowH);
+  const svg = svgIn("f7c", W, H, "Bars about zero: change in a household's annual energy bill by gas price case");
+  [-50, 0, 50, 100, 150].forEach(t => { el("line", {x1:x(t), x2:x(t), y1:top - 8, y2:H - 26, stroke:css(t === 0 ? "axis" : "grid"), "stroke-width":1}, svg);
+    T(svg, x(t), H - 10, (t < 0 ? "−$" : "$") + Math.abs(t), {fill:css("muted"), "text-anchor": t === lo ? "start" : "middle", "font-size":11}); });
+  [[D.dB_hh, "B"], [D.dC_hh, "C"]].forEach(([v, w]) => { el("line", {x1:x(v), x2:x(v), y1:top - 8, y2:H - 26, stroke:css("muted"), "stroke-width":1, "stroke-dasharray":"4 3"}, svg);
+    const left = w === "B", lx = x(v) + (left ? -5 : 5), anc = left ? "end" : "start";
+    T(svg, lx, 10, "World " + w, {"text-anchor":anc, "font-size":11, fill:css("ink"), "font-weight":600}); T(svg, lx, 23, "credit " + m0(v), {"text-anchor":anc, "font-size":11}); });
+  const halo = {stroke:css("surface"), "stroke-width":4, "paint-order":"stroke", "stroke-linejoin":"round"};
+  let y = top; const rows = [];
+  groups.forEach(([gname, items]) => {
+    T(svg, 0, y + 14, gname, Object.assign({fill:css("ink"), "font-weight":600, "font-size":13}, halo)); y += headH;
+    items.forEach(([k, name]) => {
+      const heat = D[k + "_heat"], elc = D[k + "_el"], tot = D[k + "_tot"], mk = D[k + "_totmk"], sgn = tot < 0 ? -1 : 1;
+      T(svg, 0, y + 11, name, Object.assign({fill:css("ink"), "font-size":12}, halo));
+      const by = y + 17, bh = 10, xa = x(0), xh = x(heat), xt = x(tot), g = 2;
+      el("rect", {x:Math.min(xa, xh), y:by, width:Math.max(1, Math.abs(xh - xa)), height:bh, fill:css("heat")}, svg);
+      if (Math.abs(xt - xh) > g + 0.5) el("path", {d: sgn > 0 ? `M${xh + g},${by} H${xt - 3} q3,0 3,3 v${bh - 6} q0,3 -3,3 H${xh + g} z` : `M${xh - g},${by} H${xt + 3} q-3,0 -3,3 v${bh - 6} q0,3 3,3 H${xh - g} z`, fill:css("elec")}, svg);
+      const xm = x(mk); el("line", {x1:xt, x2:xm, y1:by + bh / 2, y2:by + bh / 2, stroke:css("ink2"), "stroke-width":1.5}, svg);
+      el("line", {x1:xm, x2:xm, y1:by, y2:by + bh, stroke:css("ink2"), "stroke-width":1.5}, svg);
+      T(svg, sgn > 0 ? xm + 7 : xa + 8, by + 9, (tot > 0 ? "+" : "") + m0(tot), {fill:css("ink"), "font-weight":600});
+      const hr = el("rect", {x:0, y:y, width:W, height:rowH - 2, fill:"transparent"}, svg);
+      hit(hr, `${name}: ${m0(tot)} a year, upper bound ${m0(mk)}`, name, [{l:"Gas heating bill", v:m1(heat), c:"heat"}, {l:"Electric bill", v:m1(elc), c:"elec"}, {l:"Total", v:m1(tot)}, {l:"Upper bound", v:m1(mk)}, {l:"World C credit less this", v:m1(D[k + "_netC"])}]);
+      rows.push([name, m2(D[k + "_dp"]), m1(heat), m1(elc), m1(tot), m1(mk), m1(D[k + "_netB"]), m1(D[k + "_netC"])]);
+      y += rowH;
+    });
+  });
+  $("f7t").textContent = `The bill's own gas price effect is a fraction of the statute's credit, and the models do not agree on its sign`;
+  $("f7s").textContent = `Change in the annual energy bill of a DTE household that heats with gas. Added LNG exports cost ${m0(D.g2_tot)} to ${m0(D.g3_tot)} a year, ${pct(D.lng_share_C)} of world C's credit at most but ${pct(D.lng_share_B)} of world B's. ICF's pipeline case cuts ${m0(-D.g1_tot)}. The dashed lines mark the credits from Figure 4; a bar that passes one wipes that credit out.`;
+  table("f7tab", ["Case", "$ per MMBtu", "Heating", "Electric", "Total", "Upper bound", "World B credit less total", "World C credit less total"], rows);
+}
+
+/* ---------- Figure 8: CO2 per GW by supply ---------- */
+function fig8(){
+  const W = $("f8c").clientWidth, padR = 40, hi = 6, x = v => v / hi * (W - padR);
+  const groups = [["On-site gas: the exit the statute closes", [["gt", "Gas turbines"], ["ic", "Engines"], ["cc", "Combined cycle"]]],
+                  ["The grid under current law", [["nb", "The plants that answer new load today"], ["ucs", "UCS's Michigan run for 2050, implied"], ["avg", "Today's grid, average"], ["pa", "Clean standard met on paper, 2035"]]],
+                  ["The grid under the statute", [["cl", "Clean new-capacity condition"]]]];
+  const rowH = 36, headH = 26, top = 30; let H = top + 30; groups.forEach(g => H += headH + g[1].length * rowH);
+  const svg = svgIn("f8c", W, H, "Bars: million metric tons of CO2 a year per gigawatt, by supply");
+  [0, 1, 2, 3, 4, 5, 6].forEach(t => { el("line", {x1:x(t), x2:x(t), y1:top - 6, y2:H - 26, stroke:css(t === 0 ? "axis" : "grid"), "stroke-width":1}, svg);
+    T(svg, x(t), H - 10, String(t), {fill:css("muted"), "text-anchor": t === 0 ? "start" : "middle", "font-size":11}); });
+  const mix = D.m_mix; el("line", {x1:x(mix), x2:x(mix), y1:top - 6, y2:H - 26, stroke:css("muted"), "stroke-width":1, "stroke-dasharray":"4 3"}, svg);
+  T(svg, x(mix) - 5, 10, "Typical on-site mix", {"text-anchor":"end", "font-size":11, fill:css("ink"), "font-weight":600}); T(svg, x(mix) - 5, 23, mix.toFixed(1) + " million tons", {"text-anchor":"end", "font-size":11});
+  const halo = {stroke:css("surface"), "stroke-width":4, "paint-order":"stroke", "stroke-linejoin":"round"};
+  let y = top; const rows = [];
+  groups.forEach(([gname, items]) => {
+    T(svg, 0, y + 14, gname, Object.assign({fill:css("ink"), "font-weight":600, "font-size":13}, halo)); y += headH;
+    items.forEach(([k, name]) => {
+      const v = D["m_" + k], rate = D["e_" + k], av = D.m_mix - v, by = y + 17, bh = 10;
+      T(svg, 0, y + 11, name, Object.assign({fill:css("ink"), "font-size":12}, halo));
+      if (v > 0.005) el("path", {d:`M0,${by} H${x(v) - 3} q3,0 3,3 v${bh - 6} q0,3 -3,3 H0 z`, fill:css("co2")}, svg);
+      else el("circle", {cx:5, cy:by + bh / 2, r:4, fill:css("surface"), stroke:css("ink"), "stroke-width":2}, svg);
+      T(svg, v > 0.005 ? x(v) + 7 : 16, by + 9, v > 0.005 ? v.toFixed(1) : "0", Object.assign({fill:css("ink"), "font-weight":600}, halo));
+      const hr = el("rect", {x:0, y:y, width:W, height:rowH - 2, fill:"transparent"}, svg);
+      hit(hr, `${name}: ${v.toFixed(2)} million metric tons a year per gigawatt`, name, [{l:"Per GW-year", v:v.toFixed(2) + " Mt", c:"co2"}, {l:"Per MWh", v:rate.toFixed(3) + " t"}, {l:"Against typical on-site gas", v:(av >= 0 ? "−" : "+") + Math.abs(av).toFixed(2) + " Mt"}]);
+      rows.push([name, rate.toFixed(3), v.toFixed(2), (av >= 0 ? "" : "−") + Math.abs(av).toFixed(2)]);
+      y += rowH;
+    });
+  });
+  $("f8t").textContent = `Keeping a gigawatt on the grid cuts carbon only if the grid's new supply is clean`;
+  $("f8s").textContent = `Million metric tons of CO2 a year per gigawatt of data center load, by who supplies it. On-site gas emits ${D.m_cc.toFixed(1)} to ${D.m_gt.toFixed(1)}. The plants that answer new load on today's grid emit ${D.m_nb.toFixed(1)}, so moving a data center onto the grid under current law does not by itself cut emissions. With the statute's clean condition, each gigawatt kept on the grid avoids about ${D.av_mix_cl.toFixed(1)} million tons a year; 2 GW avoids ${D.tot_a.toFixed(1)}, or ${pct(D.sh_a)} of Michigan's 2023 power-sector CO2.`;
+  table("f8tab", ["Supply", "Tons per MWh", "Million tons per GW-year", "Avoided against typical on-site gas"], rows);
+}
+
+/* ---------- Figure 6: the exit curve ---------- */
+function fig6(){
+  const W = $("f6c").clientWidth, mL = 44, mR = 16, top = 30, plotH = 270, H = top + plotH + 44, xm = 80, ym = 600;
+  const x = a => mL + a / xm * (W - mL - mR), y = v => top + (ym - v) / ym * plotH;
+  const sp = [null, D.ex_s1, D.ex_s2, D.ex_s3], mu = [null, D.mu1, D.mu2, D.mu3], c = Math.max(0, D.c_sel);
+  const E = (a, f, i) => (f ? 1 - D.deny : 1) / (1 + Math.exp((((f ? D.ceil_r : D.ceil_o) - a) * D.K + (f ? D.cert_y : 0) - mu[i]) / sp[i]));
+  const R = (a, f, i) => (c + a) * D.twh_gw * (1 - E(a, f, i)) * (1 - D.reloc * a / 10);
+  [10, 40].forEach(a => [0, 1].forEach(f => { const w = D[`f6_${a}_2_r${f ? "r" : "o"}`]; if (Math.abs(w - R(a, f, 2)) > 0.5) console.error("figure 6 does not match the workbook at adder " + a); }));
+  const svg = svgIn("f6c", W, H, "Lines: revenue to other customers per gigawatt of prospective load, by adder, exit open and exit restricted");
+  [0, 100, 200, 300, 400, 500, 600].forEach(t => { el("line", {x1:mL, x2:W - mR, y1:y(t), y2:y(t), stroke:css(t === 0 ? "axis" : "grid"), "stroke-width":1}, svg); T(svg, mL - 6, y(t) + 4, "$" + t, {fill:css("muted"), "text-anchor":"end", "font-size":11}); });
+  T(svg, 0, 12, "$ million a year per GW of prospective load", {fill:css("muted"), "font-size":11});
+  [0, 20, 40, 60, 80].forEach(t => T(svg, x(t), top + plotH + 16, "$" + t, {fill:css("muted"), "text-anchor":"middle", "font-size":11}));
+  T(svg, (mL + W - mR) / 2, top + plotH + 36, "Adder, dollars per MWh", {"text-anchor":"middle", "font-size":11.5});
+  const halo = {stroke:css("surface"), "stroke-width":4, "paint-order":"stroke", "stroke-linejoin":"round"};
+  [[0, D.ceil_o, "ink2", "rgba(137,135,129,.18)"], [1, D.ceil_r, "adder-line", css("wash")]].forEach(([f, ceil, col, wash]) => {
+    const as = []; for (let a = 0; a < ceil; a += 1) as.push(a); as.push(ceil);
+    const lo = a => Math.min(R(a, f, 1), R(a, f, 2), R(a, f, 3)), hi = a => Math.max(R(a, f, 1), R(a, f, 2), R(a, f, 3));
+    el("polygon", {points: as.map(a => `${x(a)},${y(hi(a))}`).concat(as.slice().reverse().map(a => `${x(a)},${y(lo(a))}`)).join(" "), fill:wash}, svg);
+    el("polyline", {points: as.map(a => `${x(a)},${y(R(a, f, 2))}`).join(" "), fill:"none", stroke:css(col), "stroke-width":2, "stroke-linejoin":"round", "stroke-linecap":"round", "stroke-dasharray": f ? "none" : css("open-dash")}, svg);
+    el("circle", {cx:x(ceil), cy:y(R(ceil, f, 2)), r:5, fill:css(col), stroke:css("surface"), "stroke-width":2}, svg);
+    const lx = f ? x(ceil) - 8 : x(ceil) + 9, ly = y(R(ceil, f, 2)) + (f ? -22 : 2), anc = f ? "end" : "start";
+    T(svg, lx, ly, f ? "Exit restricted" : "Exit open", Object.assign({"text-anchor":anc, fill:css("ink"), "font-weight":600}, halo));
+    T(svg, lx, ly + 14, "ceiling " + m0(ceil), Object.assign({"text-anchor":anc, "font-size":11.5}, halo));
+  });
+  const cross = el("line", {x1:0, x2:0, y1:top, y2:top + plotH, stroke:css("axis"), "stroke-width":1, visibility:"hidden"}, svg);
+  const ov = el("rect", {x:mL, y:top, width:W - mL - mR, height:plotH, fill:"transparent", tabindex:0, role:"img", "aria-label":"Hover or use the table below for values at each adder", class:"hit"}, svg);
+  const rng = (a, f, fn) => { const v = [1, 2, 3].map(i => fn(a, f, i)); return [Math.min(...v), Math.max(...v)]; };
+  function at(a, e){ a = Math.max(0, Math.min(xm, Math.round(a))); cross.setAttribute("x1", x(a)); cross.setAttribute("x2", x(a)); cross.setAttribute("visibility", "visible");
+    const rows = [];
+    [[1, D.ceil_r, "Exit restricted", "adder-line"], [0, D.ceil_o, "Exit open", "ink2"]].forEach(([f, ceil, nm, col]) => {
+      if (a > ceil){ rows.push({l:nm, v:"past its ceiling", c:col}); return; }
+      const r = rng(a, f, R), ex = rng(a, f, E);
+      rows.push({l:nm + ", revenue", v:m0(R(a, f, 2)) + "M (" + m0(r[0]) + " to " + m0(r[1]) + ")", c:col}); rows.push({l:nm + ", share exiting", v:pct(E(a, f, 2)) + " (" + pct(ex[0]) + " to " + pct(ex[1]) + ")"}); });
+    showTip(e, `Adder of ${m0(a)} per MWh`, rows); }
+  ov.addEventListener("pointermove", e => { const b = svg.getBoundingClientRect(); at(((e.clientX - b.left) * (W / b.width) - mL) / (W - mL - mR) * xm, e); });
+  ov.addEventListener("pointerleave", () => { hideTip(); cross.setAttribute("visibility", "hidden"); });
+  ov.addEventListener("focus", e => at(10, e)); ov.addEventListener("blur", () => { hideTip(); cross.setAttribute("visibility", "hidden"); });
+  $("f6t").textContent = `Closing the exit raises the adder Michigan can charge from about ${m0(D.ceil_o)} to ${m0(D.ceil_r)} per MWh`;
+  $("f6s").textContent = `Revenue to other customers per gigawatt of prospective load, from contribution plus adder on the load that stays. Each curve stops where on-site gas becomes cheaper outright. At a $10 adder, ${pct(D.xCo)} of load exits with the exit open and ${pct(D.xCr)} with it restricted. The adder itself moves exit little: over a 15-year contract $10 per MWh costs a data center ${Math.round(D.add_d_lo)} to ${Math.round(D.add_d_hi)} days of revenue. What decides exit is how long the grid takes.`;
+  const rows = []; for (let a = 0; a <= 80; a += 10){ const g = k => D[`f6_${a}_2_${k}`]; rows.push(["$" + a, pct(g("eo")), g("ro") == null ? "past ceiling" : m0(g("ro")) + "M", pct(g("er")), g("rr") == null ? "past ceiling" : m0(g("rr")) + "M"]); }
+  table("f6tab", ["Adder", "Exits, open", "Revenue, open", "Exits, restricted", "Revenue, restricted"], rows);
+}
+
+/* ---------- Figure 9: what moves the result ---------- */
+function fig9(){
+  const W = $("f9c").clientWidth, padR = 44, lo = 20, hi = 160, x = v => (v - lo) / (hi - lo) * (W - padR), base = D.H0;
+  const items = [["gw", "New load: 1 GW to 5.5 GW"], ["c", "Contribution: new-gas case to DTE's studies"], ["g", "Gas prices: LNG high to ICF pipelines"], ["a", "Adder: $5 to $20 per MWh"], ["sh", "Adder goes to: all customers or households"],
+                 ["t", "Federal charge: none to double"], ["x", "Exit provisions: left out or included"], ["lf", "Load factor: 80% to 90%"], ["xs", "Exit sensitivity: high to low"]]
+    .map(([k, n]) => ({k, n, a:D[`s_${k}_lo`], b:D[`s_${k}_hi`]})).sort((p, q) => Math.abs(q.b - q.a) - Math.abs(p.b - p.a));
+  const rowH = 36, top = 30, H = top + items.length * rowH + 30;
+  const svg = svgIn("f9c", W, H, "Bars about the base case: dollars per household per year under one changed input");
+  [20, 40, 60, 80, 100, 120, 140, 160].forEach(t => { el("line", {x1:x(t), x2:x(t), y1:top - 6, y2:H - 26, stroke:css("grid"), "stroke-width":1}, svg); T(svg, x(t), H - 10, "$" + t, {fill:css("muted"), "text-anchor": t === lo ? "start" : "middle", "font-size":11}); });
+  el("line", {x1:x(base), x2:x(base), y1:top - 6, y2:H - 26, stroke:css("ink2"), "stroke-width":1}, svg);
+  T(svg, x(base) + 5, 10, "Base case", {"font-size":11, fill:css("ink"), "font-weight":600}); T(svg, x(base) + 5, 23, m0(base) + " a year", {"font-size":11});
+  const halo = {stroke:css("surface"), "stroke-width":4, "paint-order":"stroke", "stroke-linejoin":"round"};
+  items.forEach((it, i) => {
+    const y = top + i * rowH, by = y + 17, bh = 10, vmin = Math.min(it.a, it.b), vmax = Math.max(it.a, it.b);
+    T(svg, 0, y + 11, it.n, Object.assign({fill:css("ink"), "font-size":12}, halo));
+    if (vmin < base - 0.05) el("path", {d:`M${x(base) - 1},${by} H${x(vmin) + 3} q-3,0 -3,3 v${bh - 6} q0,3 3,3 H${x(base) - 1} z`, fill:css("neg")}, svg);
+    if (vmax > base + 0.05) el("path", {d:`M${x(base) + 1},${by} H${x(vmax) - 3} q3,0 3,3 v${bh - 6} q0,3 -3,3 H${x(base) + 1} z`, fill:css("contrib")}, svg);
+    if (vmin < base - 0.5) T(svg, x(vmin) - 6, by + 9, m0(vmin), Object.assign({"text-anchor":"end", fill:css("ink"), "font-weight":600}, halo));
+    if (vmax > base + 0.5) T(svg, x(vmax) + 6, by + 9, m0(vmax), Object.assign({fill:css("ink"), "font-weight":600}, halo));
+    const hr = el("rect", {x:0, y:y, width:W, height:rowH - 2, fill:"transparent"}, svg);
+    hit(hr, `${it.n}: ${m0(vmin)} to ${m0(vmax)} per household per year`, it.n, [{l:"First setting", v:m1(it.a)}, {l:"Second setting", v:m1(it.b)}, {l:"Base case", v:m1(base)}, {l:"Swing", v:m1(vmax - vmin)}]);
+  });
+  $("f9t").textContent = `How much load arrives, and what it contributes at standard rates, move the household number most`;
+  $("f9s").textContent = `Dollars per DTE household per year from new data center load under the statute, after exit. The base case is ${m0(base)}. The statute's own choices (the adder, who gets it, the exit provisions) matter less than the two things it does not control.`;
+  table("f9tab", ["Input", "First setting", "Second setting", "Swing"], items.map(it => [it.n, m1(it.a), m1(it.b), m1(Math.abs(it.b - it.a))]));
+}
+
+/* ---------- Figure 10: timeline ---------- */
+function fig10(){
+  const W = $("f10c").clientWidth, y0 = 2026.5, y1 = 2040.6, padL = 4, padR = 8, x = t => padL + (t - y0) / (y1 - y0) * (W - padL - padR);
+  // [start, end or null, label]. A bar spans the period the source gives; a dot is a dated event.
+  const lanes = [["Data centers", [[2027.0, 2028.99, "Saline ramps up"], [2027.92, null, "Van Buren service begins"], [2028.92, null, "Van Buren at full load"]]],
+    ["The Commission", [[2027.16, null, "Order due in DTE's rate case"]]],
+    ["DTE's plants", [[2028.0, 2028.99, "Monroe units 3 and 4 retire"], [2031.0, 2032.99, "Two proposed gas plants enter service"], [2032.0, 2032.99, "Monroe units 1 and 2 retire; DTE's coal ends"]]],
+    ["Clean energy standard", [[2030, null, "50% renewable"], [2035, null, "60% renewable, 80% clean"], [2040, null, "100% clean"]]],
+    ["The regional lines", [[2032.0, 2034.99, "Tranche 2.1 lines enter service"]]]];
+  const rh = 19, hh = 24, top = 8;
+  const place = ([a, b, label]) => { const end = b != null ? x(b) : x(a) + 5, start = b != null ? x(a) : x(a) - 5;
+    return end + 6 + tw(label) < W ? "right" : start - 6 - tw(label) > 0 ? "left" : "above"; };
+  let H = top + 28; lanes.forEach(l => { H += hh + 6; l[1].forEach(e => H += rh + (place(e) === "above" ? 15 : 0)); });
+  const svg = svgIn("f10c", W, H, "Timeline of scheduled events, 2027 to 2040");
+  for (let t = 2027; t <= 2040; t++){ el("line", {x1:x(t), x2:x(t), y1:top, y2:H - 24, stroke:css("grid"), "stroke-width":1}, svg);
+    if (t % 2 === 0 || W > 560) T(svg, x(t), H - 8, String(t), {fill:css("muted"), "text-anchor":"middle", "font-size":11}); }
+  const halo = {stroke:css("surface"), "stroke-width":4, "paint-order":"stroke", "stroke-linejoin":"round"};
+  let y = top;
+  lanes.forEach(([name, evs]) => {
+    T(svg, 0, y + 15, name, Object.assign({fill:css("ink"), "font-weight":600, "font-size":13}, halo)); y += hh;
+    evs.forEach(ev => {
+      const [a, b, label] = ev, where = place(ev);
+      if (where === "above"){ const lx = Math.max(0, Math.min(x(a) - 5, W - tw(label)));
+        T(svg, lx, y + 11, label, Object.assign({fill:css("ink"), "font-size":12}, halo)); y += 15; }
+      const cy = y + rh / 2 - 1;
+      if (b != null) el("rect", {x:x(a), y:cy - 4, width:Math.max(8, x(b) - x(a)), height:8, rx:4, fill:css("ink2")}, svg);
+      else el("circle", {cx:x(a), cy, r:5, fill:css("ink2"), stroke:css("surface"), "stroke-width":2}, svg);
+      const end = b != null ? x(b) : x(a) + 5, start = b != null ? x(a) : x(a) - 5;
+      if (where !== "above") T(svg, where === "right" ? end + 6 : start - 6, cy + 4, label, Object.assign({fill:css("ink"), "font-size":12, "text-anchor": where === "right" ? "start" : "end"}, halo));
+      y += rh;
+    });
+    y += 6;
+  });
+}
+
+/* ---------- notes ---------- */
+(function(){
+  const n = $("notes");
+  [`Anchor test: the model reproduces ${[1,2,3,4,5,6,7,8,9,10].filter(i => D["a" + i + "_res"] === "Reproduced").length} of 10 published figures within 15 percent, including DTE's own $109 million residential claim for Saline (model: ${m0(D.a3_m)} million). It does not reproduce DTE's split between the two contracts: the cost studies imply ${m0(D.a7_m)} million for Saline against DTE's public $300 million, and ${m0(D.a8_m)} million for Van Buren against $85 million.`,
+   `World A lets a shortfall from new load fall on other customers. Michigan's own orders already forbid a subsidy and make data centers pay for their grid upgrades. If the Commission enforces those conditions year by year, world A's low end rises to world B's and the federal step shrinks. The step from B to C, the adder, is arithmetic; the step from A to B is the least certain part of Figures 1 and 4.`,
+   `The approved contracts are grandfathered under section 229(f), so their ${m0(D.ap_study_tot)} million a year (cost studies) or ${m0(D.ap_staff_tot)} million (DTE's Saline claim plus Staff's Van Buren figure) is the same in every world. It is ${D.cv_s_mid.toFixed(1)} times the central line bill. Whether households see it depends on the Commission's order in Case U-22046, due by Feb. 28, 2027.`,
+   `DTE's studies add about ${m0(D.IC)} per MWh of cost for the large loads, close to fuel and purchased power. If new capacity must be built, tier 2 shrinks or turns negative; the range in Figure 4 and the red bars in Figure 3 show that case.`,
+   `The line cost per MWh is a range, ${m2(D.ln_lo)} to ${m2(D.ln_hi)}, because MISO's year-by-year Schedule 26-A charges were not found. The high case rests on an assumed 95 TWh of annual energy in Zone 7.`,
+   `Figure 7's price changes are borrowed, not modeled here. Rhodium reports how much the bill raises LNG exports but not what that does to prices; the two LNG bars price Rhodium's export numbers with DOE's and Rhodium's own price responses. ICF's case is a generic permitting reform, not this bill. The gas effects apply in worlds B and C and not in A.`,
+   `Figure 8's UCS bar is not reconciled. UCS attributes more than 11 million tons to 2.2 GW of data centers in 2050, which is ${D.ucs_x.toFixed(1)} times what a combined cycle plant would emit serving that load. Its figure must include something more than gas burned for data centers. The model does not rely on it. "On paper" means the clean energy standard is met for the load's sales; UCS finds fossil plants keep running for export, so smokestack CO2 need not fall.`,
+   `Figure 6 rests on assumptions no source supplies: that ${pct(D.ex_e2)} of prospective load goes on-site with no adder (10 to 35 percent across the cases), that a year's delay costs a data center 30 percent of a year's revenue, and that a certificate adds one year to an on-site plant. It leaves out two things: load that leaves Michigan altogether, which the statute cannot stop, and the faster grid connections the federal bill is meant to bring, which would cut exit in worlds B and C.`,
+   `This is a full-load snapshot for DTE Electric. Consumers Energy and the year-by-year path are not built.`
+  ].forEach(t => h("li", n, t));
+})();
+
+function draw(){ fig1(); fig2(); fig3(); fig4(); fig5(); fig6(); fig7(); fig8(); fig9(); fig10(); }
+draw();
+{ const b = $("bw"), root = document.documentElement, sync = () => { const on = root.dataset.theme === "print"; b.setAttribute("aria-pressed", on); b.textContent = on ? "Show in color" : "Show in black and white"; };
+  b.addEventListener("click", () => { if (root.dataset.theme === "print") delete root.dataset.theme; else root.dataset.theme = "print"; sync(); }); sync(); }
+let rt; new ResizeObserver(() => { clearTimeout(rt); rt = setTimeout(draw, 120); }).observe(document.querySelector("main"));
+</script>
+</body>
+</html>
