@@ -4,6 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Michigan Rate Model Explorer</title>
+<meta name="description" content="Pick a world and move the dials: what new data center load is worth to a DTE Electric household under the federal permitting bill (BAAJA), and how far it goes toward Michigan's new transmission lines.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Can data centers pay for Michigan's new power lines?">
+<meta property="og:description" content="Pick a world and move the dials: what new data center load is worth to a DTE Electric household under the federal permitting bill (BAAJA), and how far it goes toward Michigan's new transmission lines.">
+<meta property="og:url" content="https://parksgc.github.io/michigan-rate-model/">
+<meta property="og:image" content="https://parksgc.github.io/michigan-rate-model/figures/color_full/fig01.png">
+<meta property="og:image:alt" content="Figure 1: who pays for Michigan's new transmission lines in three worlds">
+<meta name="twitter:card" content="summary_large_image">
 <style>
 :root{
   /* layout: one reading column, each figure a card with title, chart, legend, source, table */
@@ -86,6 +94,11 @@ th{color:var(--ink2);font-weight:600}
 #tip .r b{font-weight:650}
 #tip .k{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:middle}
 .hit:hover{filter:brightness(1.12)}
+.rowfocus{fill:transparent;pointer-events:none}
+.rowfocus:focus{outline:none}
+.rowfocus:focus-visible{stroke:var(--contrib);stroke-width:2}
+.links{display:flex;flex-wrap:wrap;gap:6px 18px;margin:10px 0 0;padding:0;list-style:none;font-size:14px}
+.links a{color:var(--contrib);text-decoration:underline;text-underline-offset:2px}
 </style>
 </head>
 <body>
@@ -94,6 +107,11 @@ th{color:var(--ink2);font-weight:600}
   <div class="kicker"><span class="pill">Interactive model</span><span>DTE Electric. Checked against the workbook Nov. 15, 2026</span></div>
   <h1>Can data centers pay for Michigan's new power lines?</h1>
   <p>A federal permitting bill, BAAJA, would let states charge data centers more than it costs to serve them and credit the difference to everyone else. Pick a world and move the dials to see what new data center load is worth to a DTE household, and how much of the bill for the region's new transmission lines it covers.</p>
+  <ul class="links" aria-label="More from this model">
+    <li><a href="https://parksgc.github.io/michigan-rate-model/figures/">The ten figures</a></li>
+    <li><a href="https://parksgc.github.io/michigan-rate-model/workbook/Michigan_rate_model_DTE.xlsx">The workbook (Excel)</a></li>
+    <li><a href="https://github.com/parksgc/michigan-rate-model#readme">Sources, method and limits</a></li>
+  </ul>
 </header>
 
 <section class="card" aria-label="Choices">
@@ -123,10 +141,13 @@ th{color:var(--ink2);font-weight:600}
       <small>Worlds B and C. Other groups' estimates, applied to a household that heats with gas.</small></div>
     <div class="dial"><label class="lab" for="restrict">On-site gas under the statute</label>
       <select id="restrict"><option value="yes">Restricted: carbon capture and a certificate</option><option value="no">Left open</option></select>
-      <small>The lever that keeps load on the grid. It sets how high the adder can go.</small></div>
-    <div class="dial"><label class="lab" for="count">Data centers that leave anyway</label>
-      <select id="count"><option value="no">Not counted</option><option value="yes">Counted</option></select>
-      <small>Assumed, not estimated: one in five leaves for on-site gas when no adder is charged.</small></div>
+      <small>World C only. The lever that keeps load on the grid. It sets how high the adder can go.</small></div>
+    <div class="dial"><label class="lab" for="count">Data centers that build their own gas plants</label>
+      <select id="count"><option value="yes" selected>Counted</option><option value="no">Not counted</option></select>
+      <small>Assumed, not estimated: one in five builds its own when no adder is charged, fewer if the statute restricts it.</small></div>
+    <div class="dial"><label class="lab" for="reloc">Data centers that go to another state</label>
+      <select id="reloc"><option value="0" selected>None</option><option value="0.025">2.5% of the load for each $10 of adder</option><option value="0.05">5% for each $10 of adder</option><option value="0.1">10% for each $10 of adder</option></select>
+      <small>World C only. The exit the statute cannot close. Nothing in the record measures it; zero matches the figures.</small></div>
   </div>
 </section>
 
@@ -173,19 +194,21 @@ th{color:var(--ink2);font-weight:600}
   <p class="src">Sources: DTE Electric's cost-of-service exhibits and Rate D11 billing figures, MPSC Case U-22046; MPSC orders in Cases U-21990 (Saline) and U-22058 (Van Buren); MISO, MTEP24 and the Tranche 1 business case (line costs); Grid Strategies (federal transmission charge); ICF, Rhodium Group and the Department of Energy (gas price cases); Rabobank, Modo Energy and NETL (on-site gas). Every figure here is computed with the same formulas as the model workbook and was tested against it.</p>
 </section>
 </main>
-<div id="tip" role="status"></div>
+<div id="tip" aria-hidden="true"></div>
 <script>
 const P = {"lf": 0.9, "sh_kwh": 0.412248463982674, "sh_cos": 0.471106485101261, "c_os": 107, "pg_a": 60.5806859981694, "tcr": 6.30398259796997, "dc": 31.6670440905, "K": 0.0137522711511342, "cert_y": 1, "mu2": -0.83461744633639, "ex_s2": 1, "nonll": 40795340.6, "ll_bill": 18787572, "res_cust": 2078315, "hh_bill": 1571.8608584358, "lb_mid": 305.396565529325, "g1_tot": -25.4653698994142, "g2_tot": 7.36751523665243, "g3_tot": 20.189246749007, "g4_tot": 57.3665332824985, "g5_tot": 126.169332683461, "g1_dp": -0.22, "g2_dp": 0.0636493150684932, "g3_dp": 0.174418604651163, "g4_dp": 0.4956, "g5_dp": 1.09, "case2": 21.5800636718784, "case7": 5.45598680872654, "case10": -7.75815731733589, "ln_mid": 7.48606485539001, "lh_mid": 60.577566463721, "g_mmbtu": 97.1170434003871, "hh_kwh": 8092.04403567313, "ceil_o": 40.1153314038606, "ceil_r": 71.7823754943606};
 /* The explorer's arithmetic. Same formulas as the workbook's M1 Surplus, M2 Lines and M3 Exit tabs.
    P: parameters read from the recalculated workbook. d: the reader's choices.
-   d = {gw, adder, c, hhOnly, gas, restrict, count}
-     gw      new data center load on DTE's system, GW
-     adder   the statute's adder, $ per MWh (world C only)
-     c       what a MWh of new load contributes at standard rates, $ per MWh
-     hhOnly  true if the adder is credited to households only
-     gas     index of the gas price case, 0 for none
+   d = {gw, adder, c, hhOnly, gas, restrict, count, reloc}
+     gw        new data center load on DTE's system, GW
+     adder     the statute's adder, $ per MWh (world C only)
+     c         what a MWh of new load contributes at standard rates, $ per MWh
+     hhOnly    true if the adder is credited to households only
+     gas       index of the gas price case, 0 for none
      restrict  true if the statute restricts on-site gas (carbon capture and a certificate); sets the ceiling on the adder
-     count     true to count the data centers that leave for on-site gas anyway (the assumed curve)
+     count     true to count the data centers that leave for on-site gas (the assumed curve)
+     reloc     share of prospective load that leaves Michigan for each $10 of adder (world C only)
+   Order, as in the workbook: relocation first, then exit to on-site gas from the load that stays in Michigan.
    The model holds only up to the ceiling: P.ceil_r with the restriction, P.ceil_o without. The page keeps the adder under it. */
 function model(P, d){
   const twh = 8.76 * P.lf, t = d.gw * twh;                               // TWh a year
@@ -197,13 +220,15 @@ function model(P, d){
     const con = (w === "A" ? d.c : Math.max(0, d.c)) * t;                // $M: the floor removes a shortfall in B and C
     const tc = w === "A" ? 0 : P.tcr * t * P.nonll / (P.nonll + P.ll_bill + t * 1e6);
     const ad = w === "C" ? d.adder * t : 0;
+    const rl = w === "C" ? Math.min(1, (d.reloc || 0) * d.adder / 10) : 0;
     const x = !d.count ? 0 : w === "A" ? xA : w === "B" ? E(0, 0) : E(d.adder, d.restrict ? 1 : 0);
-    const k = (1 - x) * 1e6 / P.res_cust;
+    const stay = (1 - rl) * (1 - x);
+    const k = stay * 1e6 / P.res_cust;
     const hh = {con: con * P.sh_cos * k, tc: tc * P.sh_kwh * k, ad: ad * shAdd * k};
     const credit = hh.con + hh.tc + hh.ad;
     const gas = w === "A" || !d.gas ? 0 : P["g" + d.gas + "_tot"];
-    const m = {con: con * (1 - x), tc: tc * (1 - x), ad: ad * (1 - x)};
-    out[w] = {x, hh, credit, pct: credit / P.hh_bill, m, total: m.con + m.tc + m.ad, cov: (m.con + m.tc + m.ad) / P.lb_mid, gas, net: credit - gas};
+    const m = {con: con * stay, tc: tc * stay, ad: ad * stay};
+    out[w] = {x, rl, stay, hh, credit, pct: credit / P.hh_bill, m, total: m.con + m.tc + m.ad, cov: (m.con + m.tc + m.ad) / P.lb_mid, gas, net: credit - gas};
   }
   return out;
 }
@@ -218,7 +243,7 @@ const m0 = v => (Math.round(v) < 0 ? "−$" : "$") + Math.abs(Math.round(v)).toL
 const m1 = v => (v < -0.05 ? "−$" : "$") + Math.abs(v).toFixed(1);
 const m2 = v => (v < 0 ? "−$" : "$") + Math.abs(v).toFixed(2);
 const mm = v => m0(v) + "M";
-const pct = v => Math.round(v * 100) + "%";
+const pct = v => (Math.round(v * 100) < 0 ? "−" : "") + Math.abs(Math.round(v * 100)) + "%";
 const tw = s => s.length * 6.3 + 12;
 const T = (svg, x, y, s, o={}) => el("text", Object.assign({x, y, "font-size":12, fill:css("ink2")}, o), svg, s);
 const tip = $("tip");
@@ -235,10 +260,13 @@ function showTip(evt, title, rows){
   tip.style.top = Math.max(8, Math.min(y, innerHeight - tip.offsetHeight - 8)) + "px";
 }
 const hideTip = () => { tip.style.display = "none"; };
-function hit(node, label, title, rows){
-  node.setAttribute("class", "hit"); node.setAttribute("tabindex", "0"); node.setAttribute("role", "img"); node.setAttribute("aria-label", label);
+function hit(node, title, rows){   // hover only; the row's focus target carries the keyboard and screen reader version
+  node.setAttribute("class", "hit"); node.setAttribute("aria-hidden", "true");
   node.addEventListener("pointermove", e => showTip(e, title, rows)); node.addEventListener("pointerleave", hideTip);
-  node.addEventListener("focus", e => showTip(e, title, rows)); node.addEventListener("blur", hideTip);
+}
+function focusRow(svg, x, y, w, hgt, label, title, rows){
+  const f = el("rect", {x, y, width:Math.max(1, w), height:hgt, rx:4, class:"rowfocus", tabindex:0, role:"img", "aria-label":label}, svg);
+  f.addEventListener("focus", e => showTip(e, title, rows)); f.addEventListener("blur", hideTip);
 }
 
 /* ---------- the choices ---------- */
@@ -248,7 +276,7 @@ CON.forEach(([n, v], i) => { const o = h("option", $("con"), `${n}: ${m2(v)} per
 GAS.forEach(([n, v], i) => { const o = h("option", $("gas"), i ? `${n}: gas ${v < 0 ? "down" : "up"} $${Math.abs(v).toFixed(2)}` : n); o.value = i; });
 const WN = {A:"A. No federal bill", B:"B. The bill, no state action", C:"C. The bill plus our model state legislation"};
 const SEG = [["con", "Contribution at standard rates", "contrib"], ["tc", "Federal transmission charge", "tcredit"], ["ad", "Adder under the statute", "adder"]];
-function choices(){ return {w: document.querySelector('input[name="w"]:checked').value, gw: +$("gw").value, adder: +$("ad").value, c: CON[+$("con").value][1], hhOnly: $("rule").value === "hh", gas: +$("gas").value, restrict: $("restrict").value === "yes", count: $("count").value === "yes"}; }
+function choices(){ return {w: document.querySelector('input[name="w"]:checked').value, gw: +$("gw").value, adder: +$("ad").value, c: CON[+$("con").value][1], hhOnly: $("rule").value === "hh", gas: +$("gas").value, restrict: $("restrict").value === "yes", count: $("count").value === "yes", reloc: +$("reloc").value}; }
 
 /* ---------- one stacked row chart, used twice ---------- */
 function nice(v){ const p = Math.pow(10, Math.floor(Math.log10(v))), f = v / p; return (f <= 1 ? 1 : f <= 2 ? 2 : f <= 2.5 ? 2.5 : f <= 5 ? 5 : 10) * p; }
@@ -266,19 +294,21 @@ function rows(id, d, R, o){
   ["A", "B", "C"].forEach((w, i) => {
     const y = top + i * rowH, v = o.get(w), sel = w === d.w;
     T(svg, 0, y + 13, WN[w], {fill:css(sel ? "ink" : "ink2"), "font-weight": sel ? 650 : 400, "font-size":12.5, stroke:css("surface"), "stroke-width":4, "paint-order":"stroke"});
-    let cur = 0; const by = y + 20;
+    let cur = 0; const by = y + 20, parts = [];
     if (v.con < 0){ const r = el("rect", {x:x(v.con), y:by, width:Math.max(1, x(0) - x(v.con) - 1), height:bh, rx:3, fill:css("neg")}, svg);
-      hit(r, `${WN[w]}: shortfall ${o.fmt(v.con)}`, WN[w], [{l:"Shortfall carried by other customers", v:o.fmt(v.con), c:"neg"}]); }
+      const row = {l:"Shortfall carried by other customers", v:o.fmt(v.con), c:"neg"}; parts.push(row); hit(r, WN[w], [row]); }
     SEG.forEach(([k, name, col]) => { const val = k === "con" ? Math.max(0, v.con) : v[k]; if (val <= 0) return;
       const x0 = x(cur), wv = x(cur + val) - x0; cur += val;
       const r = el("rect", {x:x0 + (x0 > x(0) + .5 ? 2 : 0), y:by, width:Math.max(1, wv - (x0 > x(0) + .5 ? 2 : 0)), height:bh, fill:css(col)}, svg);
-      hit(r, `${WN[w]}: ${name}, ${o.fmt(val)}`, WN[w], [{l:name, v:o.fmt(val), c:col}, {l:"Total", v:o.fmt(o.total(w))}]);
+      const row = {l:name, v:o.fmt(val), c:col}; parts.push(row); hit(r, WN[w], [row, {l:"Total", v:o.fmt(o.total(w))}]);
       const lab = o.fmt(val); if (tw(lab) < wv - 2) T(svg, x0 + 8, by + 15, lab, {fill:"#fff", "font-weight":600, "pointer-events":"none"}); });
     let end = x(cur);
     if (o.rest){ const rest = o.rest(w); if (rest > 0){ const x0 = x(cur), wv = x(cur + rest) - x0;
       const r = el("rect", {x:x0 + (cur > 0 ? 2 : 0), y:by, width:Math.max(1, wv - (cur > 0 ? 2 : 0)), height:bh, fill:css("neutral")}, svg);
-      hit(r, `${WN[w]}: left for other customers, ${o.restFmt(rest)}`, WN[w], [{l:"Left for other customers", v:o.restFmt(rest), c:"neutral"}]); end = x(cur + rest); } }
+      const row = {l:"Left for other customers", v:o.restFmt(rest), c:"neutral"}; parts.push(row); hit(r, WN[w], [row]); end = x(cur + rest); } }
     T(svg, Math.max(end, x(0)) + 8, by + 15, o.label(w), {fill:css("ink"), "font-weight":650, "font-size":13});
+    const all = parts.concat([{l:"Total", v:o.label(w)}]), x1 = Math.min(x(Math.min(0, v.con)), x(0)) - 3;
+    focusRow(svg, x1, by - 3, Math.max(end, x(0)) + 3 - x1, bh + 6, `${WN[w]}: ${parts.length ? parts.map(p => p.l + " " + p.v).join("; ") + "; total " : "nothing; total "}${o.label(w)}`, WN[w], all);
   });
 }
 
@@ -289,28 +319,32 @@ function draw(){
   const capR = Math.min(70, Math.floor(P.ceil_r)), capO = Math.min(40, Math.floor(P.ceil_o)), cap = $("restrict").value === "yes" ? capR : capO;
   $("ad").max = cap; if (+$("ad").value > cap) $("ad").value = cap;
   const d = choices(), R = model(P, d), r = R[d.w];
-  $("adh").textContent = `World C only. ${d.adder ? `Adds ${Math.round(d.adder / P.pg_a * 100)}% to the ${m0(P.pg_a)} per MWh a data center pays DTE today. ` : ""}The dial stops at $${cap}, just short of where on-site gas becomes cheaper than the grid: $${capR} with on-site gas restricted, $${capO} with it left open.`;
+  const paid = P.pg_a + P.tcr + d.adder;
+  $("adh").textContent = `World C only. With the federal transmission charge, a data center would pay ${m0(paid)} per MWh, ${pct((paid - P.pg_a) / P.pg_a)} more than the ${m0(P.pg_a)} it pays DTE today. The dial stops at $${cap}, just short of where on-site gas becomes cheaper than the grid: $${capR} with on-site gas restricted, $${capO} with it left open.`;
   $("gwo").textContent = d.gw.toFixed(1) + " GW"; $("ado").textContent = "$" + d.adder + " per MWh";
   $("t1").textContent = m0(r.credit); $("t1s").textContent = `${r.pct < 0 ? "−" : ""}${Math.abs(r.pct * 100).toFixed(1)}% of the average ${m0(P.hh_bill)} bill`;
-  $("t2").textContent = r.cov < 0 ? "None" : pct(r.cov); $("t2s").textContent = r.cov < 0 ? `New load adds ${mm(-r.total)} a year to other customers' costs` : `${mm(r.total)} of ${mm(P.lb_mid)} a year`;
+  const times = v => v.toFixed(1).replace(/\.0$/, "");
+  $("t2").textContent = r.cov < 0 ? "None" : r.cov > 1 ? "All of it" : pct(r.cov);
+  $("t2s").textContent = r.cov < 0 ? `New load adds ${mm(-r.total)} a year to other customers' costs` : r.cov > 1 ? `${mm(r.total)} a year, ${times(r.cov)} times the ${mm(P.lb_mid)} line bill` : `${mm(r.total)} of ${mm(P.lb_mid)} a year`;
   const g = r.gas; $("t3").textContent = d.w === "A" || !d.gas ? "$0" : (g > 0 ? "−" : "+") + "$" + Math.abs(Math.round(g));
   $("t3s").textContent = d.w === "A" ? "No federal bill, no effect" : !d.gas ? "No gas price case chosen" : g > 0 ? "Higher heating and electric bills" : "Lower heating and electric bills";
   $("t4").textContent = m0(r.net); $("t4s").textContent = "Credit less the gas price effect";
   let s;
   if (d.gw === 0) s = "With no new data center load there is nothing to credit, in any world.";
   else { s = `With ${d.gw} GW of new data centers in world ${d.w}, a DTE household ${r.credit >= 0 ? "gains" : "loses"} ${m0(Math.abs(r.credit))} a year`;
-    s += r.cov < 0 ? ", and the new load adds to what other customers owe." : `, and the new load covers ${pct(r.cov)} of what DTE's other customers owe for the new regional lines.`; }
-  if (d.count && d.gw > 0) s += ` ${pct(r.x)} of the load that would have come leaves for on-site gas.`;
+    s += r.cov < 0 ? ", and the new load adds to what other customers owe." : r.cov > 1 ? `, and the new load sends DTE's other customers ${times(r.cov)} times what they owe for the new regional lines.` : `, and the new load sends DTE's other customers an amount equal to ${pct(r.cov)} of what they owe for the new regional lines.`; }
+  if (d.gw > 0 && r.rl > 0) s += ` ${pct(r.rl)} of the load that would have come goes to another state.`;
+  if (d.count && d.gw > 0) s += ` ${pct(r.x)} of the load that stays in Michigan builds its own gas plants.`;
   if (d.w !== "A" && d.gas) s += ` The gas price case ${g > 0 ? "takes back" : "adds"} ${m0(Math.abs(g))}, leaving ${m0(r.net)}.`;
   $("say").textContent = s;
   rows("c1", d, R, {aria:"Household credit by world, dollars per year", get:w => R[w].hh, total:w => R[w].credit, fmt:m1, label:w => m0(R[w].credit), tick:t => m0(t), min:40});
-  $("c2s").textContent = `DTE's other customers owe about ${mm(P.lb_mid)} a year for MISO's Tranche 1 and 2.1 lines at the central cost. Bars show the dollars new load sends them, as a share of that bill. The dashed line is the whole bill.`;
+  $("c2s").textContent = `DTE's other customers owe about ${mm(P.lb_mid)} a year for MISO's Tranche 1 and 2.1 lines at the central cost. Bars show the dollars new load sends them, as a share of that bill. None of it is earmarked for the lines; the comparison gives a sense of scale. The dashed line is the whole bill.`;
   rows("c2", d, R, {aria:"Share of the line bill covered by world", get:w => ({con:R[w].m.con / P.lb_mid, tc:R[w].m.tc / P.lb_mid, ad:R[w].m.ad / P.lb_mid}), total:w => R[w].cov,
     fmt:v => pct(v) + " (" + mm(v * P.lb_mid) + ")", label:w => R[w].cov < 0 ? "none" : pct(R[w].cov), tick:t => pct(t), min:1, ref:{v:1},
     rest:w => Math.max(0, 1 - Math.max(0, R[w].cov)), restFmt:v => mm(v * P.lb_mid)});
   const t = document.createElement("table"); const tr = h("tr", h("thead", t)); ["", "World A", "World B", "World C"].forEach(x => h("th", tr, x)); const tb = h("tbody", t);
   [["Contribution at standard rates, $M a year", w => R[w].m.con.toFixed(1)], ["Federal transmission charge, $M", w => R[w].m.tc.toFixed(1)], ["Adder, $M", w => R[w].m.ad.toFixed(1)], ["Share of the line bill covered", w => pct(R[w].cov)],
-   ["Household credit, $ a year", w => m1(R[w].credit)], ["Share of the average bill", w => (R[w].pct < 0 ? "−" : "") + Math.abs(R[w].pct * 100).toFixed(1) + "%"], ["Load that leaves for on-site gas", w => !d.count ? "not counted" : pct(R[w].x)],
+   ["Household credit, $ a year", w => m1(R[w].credit)], ["Share of the average bill", w => (R[w].pct < -0.0005 ? "−" : "") + Math.abs(R[w].pct * 100).toFixed(1) + "%"], ["Load that goes to another state", w => w === "C" ? pct(R[w].rl) : "none"], ["Load in Michigan that builds its own gas plants", w => !d.count ? "not counted" : pct(R[w].x)],
    ["Gas price effect on the household, $ a year", w => m1(R[w].gas)], ["Net for the household, $ a year", w => m1(R[w].net)]].forEach(([n, f]) => { const row = h("tr", tb); h("td", row, n); ["A", "B", "C"].forEach(w => h("td", row, f(w))); });
   $("tab").textContent = ""; $("tab").appendChild(t);
 }
@@ -319,8 +353,9 @@ function draw(){
  `What standard rates contribute is disputed. MPSC Staff's Van Buren figure, ${m2(P.case7)} per MWh, is the lowest positive number in the record and the default here. DTE's own studies put it near ${m0(P.case2)}.`,
  `The line bill is DTE's other customers' share of MISO's Tranche 1 and 2.1 lines at full phase-in, ${m2(P.ln_mid)} per MWh, about ${m0(P.lh_mid)} a household a year.`,
  `The adder's ceiling is where on-site gas becomes cheaper than DTE's grid: about ${m0(P.ceil_o)} per MWh today, and about ${m0(P.ceil_r)} if the statute makes on-site gas plants capture their carbon and get a certificate. The model does not go past it.`,
- `Load that leaves Michigan for another state is not modeled, and the statute cannot close that exit. It matters most at a high adder, so the top of the range is the least reliable part of this page.`,
- `The share of data centers that leave for on-site gas below the ceiling is assumed in order to show how the adder and the restriction interact. Nothing anchors it.`,
+ `Load that goes to another state is a dial, set to zero by default because nothing in the record measures it. The statute cannot close that exit, and it matters most at a high adder, so the top of the range is the least reliable part of this page.`,
+ `None of the money in these worlds is earmarked for the lines. Contribution and the federal charge lower other customers' bills generally; the adder is credited as the statute directs. The line bill is a yardstick for scale.`,
+ `The share of data centers that build their own gas plants below the ceiling is assumed, in order to show how the adder and the restriction interact. Nothing anchors it. It treats speed as the main reason to leave the grid, so the adder moves it only a little: with on-site gas left open it goes from 20% at no adder to about 30% at $40.`,
  `Gas price cases are other groups' estimates of the federal bill's effect, in dollars per MMBtu, applied to a household that uses ${Math.round(P.g_mmbtu)} MMBtu of gas and ${Math.round(P.hh_kwh).toLocaleString("en-US")} kWh a year.`
 ].forEach(x => h("li", $("notes"), x));
 document.querySelectorAll("input, select").forEach(e => e.addEventListener("input", draw));

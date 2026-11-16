@@ -22,7 +22,7 @@ Author: Collin Parks, University of Michigan Law School.
 | `figures/color_full/` | Color PNGs with title, note and source line |
 | `workbook/Michigan_rate_model_DTE.xlsx` | The model. Every result is a live formula; every input carries its source |
 
-If GitHub Pages is turned on for this repository, the explorer is the home page and the figures are at `figures/`.
+The explorer is live at https://parksgc.github.io/michigan-rate-model/ and the figures at https://parksgc.github.io/michigan-rate-model/figures/.
 
 ## Results at the default settings
 
@@ -35,6 +35,7 @@ Defaults: 2 GW of new data center load on DTE's system, a $10 per MWh adder cred
 
 - The line bill is DTE's other customers' share of MISO's Tranche 1 and 2.1 lines: about $305 million a year, or $61 a household, at the central cost.
 - The household credit in world C is 3.9% of the average residential bill.
+- The explorer opens with exit to on-site gas counted, so its starting numbers are a little lower: $58 a household and about 91% of the line bill in world C.
 - The result moves most with two things the statute does not control: how much load arrives, and what that load contributes at standard rates.
 
 ## How it works
@@ -65,7 +66,8 @@ Each input row on the workbook's Inputs tab names its source and page. The main 
 - The inputs behind Modules 1 and 2 were read a second time from the dockets and MISO documents and matched.
 - 462 workbook cells were recomputed independently in Python: 0 mismatches.
 - 33 tests change one dial at a time and check a property the logic requires (for example, with the adder at zero, world C equals world B).
-- The explorer's arithmetic was compared with the workbook at eight dial settings: 152 comparisons, 0 mismatches.
+- The explorer's arithmetic was compared with the workbook at thirteen dial settings: 252 comparisons, 0 mismatches.
+- What the explorer prints (the four numbers, the sentence, the table) was checked against the workbook at the same settings: 112 checks, 0 mismatches.
 - Eight of ten published figures the model should reproduce fall within 15%. The two that do not are DTE's separate claims for Saline and Van Buren; the model reproduces their sum.
 
 ## Limits
@@ -74,7 +76,9 @@ Each input row on the workbook's Inputs tab names its source and page. The main 
 - **A snapshot, not a forecast.** Results are for full load on DTE's 2029 study year, not a path by year.
 - **The step from world A to world B is uncertain.** World A lets a shortfall from new load fall on other customers. Michigan's own orders already forbid a subsidy, so the federal floor may add less than shown.
 - **The central contribution figure is a choice.** Staff's Van Buren figure ($5.46 per MWh) is the lowest positive number in the record. DTE's own studies put it near $22.
-- **The exit module is assumed.** Nothing anchors the share of data centers that leave, and load that goes to another state is not modeled. A large adder will look better here than it should.
+- **The exit module is assumed.** Nothing anchors the share of data centers that build their own gas plants. The assumed curve treats speed as the main reason to leave the grid, so the adder moves it little: with on-site gas left open, 20% leave at no adder and about 30% at $40.
+- **Load that goes to another state is a dial, set to zero.** Nothing in the record measures it, and the model legislation cannot close that exit. With it at zero, a large adder looks better than it should; turn it up in the explorer or on the workbook's Scenarios tab.
+- **None of the money is earmarked for the lines.** The line bill is a yardstick for scale. Contribution and the federal charge lower other customers' bills generally.
 - **Per-household figures mix years** (2029 energy over a 2025 customer count) and run 1 to 2% high.
 - **Some inputs come from summaries or secondary sources**, including the residential customer count, the carbon capture cost and the social cost of carbon. The Inputs tab marks each.
 - The Union of Concerned Scientists' Michigan emissions figure could not be reconciled with the model's rates.
